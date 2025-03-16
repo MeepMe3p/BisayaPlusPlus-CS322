@@ -1,0 +1,39 @@
+[1] Bpp has two ways for executing a file, by prompt (line by line) or by file
+[2] For reading the file and executing it
+[3] For entering code and executing it one at a time
+[4] Store raw code as a simple string
+// LEXER or Scanner
+[5] the lexical analyzer
+[6] used for input, consumes the character and returns it 
+[7] creates tokens for the each text
+[8] tokens for text but for literals
+[9] similar to advance but does not consume it
+[10] checks whether the next is something to know whether it is <= or just <
+[11] FOR STRING LITERALS
+
+
+
+
+[EXTRAS] WITH DECIMAL
+[1.1] If has error exits duuuuuh (>_<)
+[1.2] If error continues doesnt exit
+[1.3] An infinite loop to execute code line by line (something similar sa cmd or terminal)
+
+
+[TIPS] has T
+[T1] Press Ctrl + D to exit the loop
+
+
+
+[NOTES] HAS N
+[N1] The reason why error is in here not in other places is cuz it is a good practice to separate code that
+generates from the code that reports them
+
+
+[EXTRA BUHATONONS FOR LE PROGRAMMER]
+CREATE AN ERRORREPORTER THING FOR ERRORS
+
+
+[LE PROGRAMMER NOTES]
+The job of a scanner is to scan through list of chars and group them together
+var language = "string" ; // each of these are lexemes

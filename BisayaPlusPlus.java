@@ -23,6 +23,7 @@ public class BisayaPlusPlus {
             }
         }else{
             try {
+                System.out.println("aaaa");
                 runPrompt();
             } catch (IOException ex) {
             }

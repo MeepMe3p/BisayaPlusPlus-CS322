@@ -37,3 +37,17 @@ CREATE AN ERRORREPORTER THING FOR ERRORS
 [LE PROGRAMMER NOTES]
 The job of a scanner is to scan through list of chars and group them together
 var language = "string" ; // each of these are lexemes
+
+
+
+expression     → literal
+               | unary
+               | binary
+               | grouping ;
+
+literal        → NUMBER | STRING | "true" | "false" | "nil" ;
+grouping       → "(" expression ")" ;
+unary          → ( "-" | "!" ) expression ;
+binary         → expression operator expression ;
+operator       → "==" | "!=" | "<" | "<=" | ">" | ">="
+               | "+"  | "-"  | "*" | "/" ;

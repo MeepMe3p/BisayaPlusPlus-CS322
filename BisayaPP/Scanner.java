@@ -1,3 +1,5 @@
+package BisayaPP;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,13 +40,13 @@ public class Scanner {
             case ',':addToken(TokenType.COMMA);break;
             case '.':addToken(TokenType.DOT);break;
             case '+':addToken(TokenType.PLUS);break;
-            // case '-':addToken(TokenType.MINUS);break;
+            // case '-':addToken(BisayaPP.TokenType.MINUS);break;
             case ';':addToken(TokenType.SEMICOLON);break;
             case '*':addToken(TokenType.STAR);break;
 
-            // case '/':addToken(TokenType.SLASH);break;
+            // case '/':addToken(BisayaPP.TokenType.SLASH);break;
             case '%':addToken(TokenType.MODULO);break;
-//            case '&':addToken(TokenType.CONCAT);break;
+//            case '&':addToken(BisayaPP.TokenType.CONCAT);break;
             case '-':
                 if(match('-')){
                     // for comments 
@@ -62,7 +64,7 @@ public class Scanner {
                 break;
 
             case '<':
-                // addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+                // addToken(match('=') ? BisayaPP.TokenType.LESS_EQUAL : BisayaPP.TokenType.LESS);
                 if(match('=')){
                     addToken(TokenType.LESS_EQUAL);
                 } else if(match('>')){

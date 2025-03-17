@@ -1,4 +1,4 @@
-// TOKEN TYPE ENUM FOR DETERMINING WHAT TYPE OF LEXEME IS IT
+package BisayaPP;// TOKEN TYPE ENUM FOR DETERMINING WHAT TYPE OF LEXEME IS IT
 
 public enum TokenType {
 //    Single Character tokens

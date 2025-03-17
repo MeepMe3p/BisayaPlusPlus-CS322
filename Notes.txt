@@ -2,7 +2,7 @@
 [2] For reading the file and executing it
 [3] For entering code and executing it one at a time
 [4] Store raw code as a simple string
-// LEXER or Scanner
+// LEXER or BisayaPP.Scanner
 [5] the lexical analyzer
 [6] used for input, consumes the character and returns it 
 [7] creates tokens for the each text
@@ -10,7 +10,10 @@
 [9] similar to advance but does not consume it
 [10] checks whether the next is something to know whether it is <= or just <
 [11] FOR STRING LITERALS
-
+[12] to automate the generation of syntax trees
+[13] place each of the different expressions inside a newly created java file
+[14] visitor pattern, instead of a bunch of if statements and writing a new function for each expression, use this pattern for more efficiency
+    so that immediately go to the interpret method of that type of expression without the need of checking
 
 
 
@@ -51,3 +54,8 @@ unary          → ( "-" | "!" ) expression ;
 binary         → expression operator expression ;
 operator       → "==" | "!=" | "<" | "<=" | ">" | ">="
                | "+"  | "-"  | "*" | "/" ;
+
+
+               
+javac -d . BisayaPP/*.java   # ComPILE
+java BisayaPP.BisayaPlusPlus   # RUUUN

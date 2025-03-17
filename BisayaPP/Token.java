@@ -1,3 +1,5 @@
+package BisayaPP;
+
 // Creates token objects for the lexemes
 public class Token {
     final TokenType type;

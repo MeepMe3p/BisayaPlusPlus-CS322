@@ -68,6 +68,7 @@ public class Scanner {
                 if(match('=')){
                     addToken(TokenType.LESS_EQUAL);
                 } else if(match('>')){
+                    
                     addToken(TokenType.NOT_EQUAL);
                 } else{
                     addToken(TokenType.LESS);

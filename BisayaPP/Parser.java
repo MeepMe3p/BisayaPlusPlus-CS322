@@ -26,7 +26,7 @@ public class Parser {
     private Expr equality(){
         Expr expr = comparison();
 
-        while (match(BANG_EQUAL, EQUAL)) {
+        while (match(BANG_EQUAL, EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
             Token operator = previous();
             Expr right = comparison();
             expr = new Expr.Binary(expr, operator, right);

@@ -4,6 +4,7 @@ public class Interpreter implements Expr.Visitor <Object> {
 
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
+        // System.out.println("binary");
         Object left = evaluate(expr.left);
         Object right = evaluate(expr.right);
         switch(expr.operator.type){
@@ -11,6 +12,7 @@ public class Interpreter implements Expr.Visitor <Object> {
                 checkNumberOperands(expr.operator, left,right);
                 return (double) left > (double) right;
             case GREATER_EQUAL: 
+
                 checkNumberOperands(expr.operator, left,right);
                 return (double) left >= (double) right;
             case LESS: 
@@ -23,8 +25,8 @@ public class Interpreter implements Expr.Visitor <Object> {
             case BANG_EQUAL:
                 checkNumberOperands(expr.operator, left,right);
                 return !isEqual(left,right);
-            // TODO: REMOVE LATER=====================^
-
+                // TODO: REMOVE LATER=====================^
+                
             case NOT_EQUAL:
                 checkNumberOperands(expr.operator, left,right);
                 return !isEqual(left,right);
@@ -62,16 +64,19 @@ public class Interpreter implements Expr.Visitor <Object> {
 
     @Override
     public Object visitGroupingExpr(Expr.Grouping expr) {
+        // System.out.println("grouping");
         return evaluate(expr.expression);
     }
 
     @Override
     public Object visitLiteralExpr(Expr.Literal expr) {
+        // System.out.println("literal");
         return expr.value;
     }
 
     @Override
     public Object visitUnaryExpr(Expr.Unary expr) {
+        // System.out.println("unary");
         Object right = evaluate(expr.right);
 
         switch(expr.operator.type){

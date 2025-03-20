@@ -15,13 +15,14 @@ public class GenerateAST {
         String outputDir = args[0];
 
         defineAST(outputDir,"Expr",Arrays.asList(
-            "Binary   : Expr left, Token operator, Expr right",
+            "Binary   : Expr left, Token operator, Expr right", // TODO: edit this to have a type checking sincce "hello" + 1 should be wrong
             "Grouping : Expr expression",
             "Literal  : Object value",
             "Unary    : Token operator, Expr right"
             // ,"Variable : Token name, String type" // variables
         ));
     }
+    // [15]
     private static void defineAST(String outputDir, String baseName, List<String> types) throws IOException{
         String path = outputDir + "/"+baseName+".java";
         PrintWriter writer = new PrintWriter(path,"UTF-8");
@@ -29,6 +30,8 @@ public class GenerateAST {
         writer.println("package BisayaPP;");
         writer.println();
         writer.println("import java.util.List;");
+        writer.println();
+        writer.println("// [16]");
         writer.println();
         writer.println("abstract class " + baseName + " {");
 

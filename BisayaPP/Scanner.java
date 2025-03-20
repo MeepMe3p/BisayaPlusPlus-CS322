@@ -101,7 +101,8 @@ public class Scanner {
                 line++;
                 break;
             case '"':
-                string(); break;
+                string();
+                break;
         default:
                 if(isDigit(c)){
                     number();
@@ -125,10 +126,8 @@ public class Scanner {
     }
     // [11]
     private void string(){
-        while(peek() != '"' && isAtEnd()){
-            if(peek() == 'n'){
-                line++;
-            }
+        while(peek() != '"' && !isAtEnd()){
+            if(peek() == '\n') line++;
             advance();
         }
         if(isAtEnd()){
@@ -180,6 +179,8 @@ public class Scanner {
     }
     // [6]
     private char advance() {
+        // System.out.print(source.charAt(current));
+        
         return source.charAt(current++);
     }
     // [7]

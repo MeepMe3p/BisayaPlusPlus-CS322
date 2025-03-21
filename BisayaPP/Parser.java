@@ -45,8 +45,7 @@ public class Parser {
     // BISAYA++
     private Stmt ipakitaStatement(){
         Expr expr = expression();
-        consume(SEMICOLON, "Expect ':' after IPAKITA");
-        return new Stmt.Print(expr);
+        return new Stmt.Ipakita(expr);
     }
 
 

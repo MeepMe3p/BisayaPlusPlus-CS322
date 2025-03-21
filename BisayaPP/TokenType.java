@@ -24,7 +24,7 @@ public enum TokenType {
     NUMERO, LETRA,TIPIK, TINUOD,
     UG, O, DILI,
 
-    COLON,
+    COLON, NEWLINE,
 
 
 

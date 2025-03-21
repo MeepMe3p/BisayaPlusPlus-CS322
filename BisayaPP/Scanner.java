@@ -105,6 +105,7 @@ public class Scanner {
 
             case '\n':
                 line++;
+                // addToken(NEWLINE);    //TODO TEST REMOVE LEATER
                 break;
             case '"':
                 string();
@@ -126,10 +127,15 @@ public class Scanner {
             advance();
         String text = source.substring(start,current);
         TokenType type = keywords.get(text);
-        System.out.println(text);
+        // System.out.println(text);
         if(type == null) 
             type = IDENTIFIER;
-        addToken(type);
+        if(type == IPAKITA && !match(':')){
+            BisayaPlusPlus.error(line,"Expected ':' after IPAKITA");
+        }
+        else{ // remove raning
+            addToken(type);
+        }
     }
     // [11]
     private void string(){

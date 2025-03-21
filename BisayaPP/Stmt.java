@@ -35,8 +35,7 @@ abstract class Stmt {
     final Expr expression;
   }
   static class Ipakita extends Stmt {
-    Ipakita(Token operator, Expr expression) {
-      this.operator = operator;
+    Ipakita(Expr expression) {
       this.expression = expression;
     }
 
@@ -45,7 +44,6 @@ abstract class Stmt {
     return visitor.visitIpakitaStmt(this);
     }
 
-    final Token operator;
     final Expr expression;
   }
 

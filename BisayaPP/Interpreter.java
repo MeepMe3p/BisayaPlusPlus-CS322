@@ -1,6 +1,11 @@
 package BisayaPP;
 
-public class Interpreter implements Expr.Visitor <Object> {
+import BisayaPP.Stmt.Expression;
+import BisayaPP.Stmt.Ipakita;
+import BisayaPP.Stmt.Print;
+import java.util.List;
+
+public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
@@ -107,14 +112,42 @@ public class Interpreter implements Expr.Visitor <Object> {
     private Object evaluate (Expr expr){
         return expr.accept(this);
     }
-    public void interpret(Expr expression){
+    private void execute(Stmt stmt){
+        stmt.accept(this);
+    }
+
+    @Override
+    public Void visitExpressionStmt(Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Print stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;
+    }
+    
+    // BISAYA ++ STUFF
+    @Override
+    public Void visitIpakitaStmt(Ipakita stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;   
+    }
+    // =====================
+    // [18]
+    public void interpret(List<Stmt> statements){
         try {
-            Object value =evaluate(expression);
-            System.out.println(stringify(value));
+            for(Stmt statement: statements){
+                execute(statement);
+            }
         } catch (RuntimeError e) {
             BisayaPlusPlus.runTimeError(e);
         }
     }
+    // [17]
     private String stringify(Object object){
         if(object == null) return "nil";
         if(object instanceof Double){
@@ -126,5 +159,10 @@ public class Interpreter implements Expr.Visitor <Object> {
         }
         return object.toString();
     }
+
+
+
+
+
 
 }

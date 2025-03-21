@@ -3,7 +3,7 @@ package BisayaPP;// TOKEN TYPE ENUM FOR DETERMINING WHAT TYPE OF LEXEME IS IT
 public enum TokenType {
 //    Single Character tokens
     LEFT_PAREN, RIGHT_PARENT, LEFT_BRACE, RIGHT_BRACE, COMMA, DOT, MINUS, PLUS, MODULO,
-    SEMICOLON, SLASH, STAR,
+    SEMICOLON, SLASH, STAR, 
 
 //    One or two character tokens
     BANG, BANG_EQUAL,
@@ -23,6 +23,8 @@ public enum TokenType {
     SUGOD, MUGNA,  IPAKITA, KATAPUSAN, DAWAT,KUNG, KUNGKUNG,KUNGWALA,PUNDOK,ALANGSA,
     NUMERO, LETRA,TIPIK, TINUOD,
     UG, O, DILI,
+
+    COLON,
 
 
 

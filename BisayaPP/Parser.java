@@ -1,6 +1,7 @@
 package BisayaPP;
 
 import static BisayaPP.TokenType.*;
+import java.util.ArrayList;
 import java.util.List;
 public class Parser {
 
@@ -12,17 +13,44 @@ public class Parser {
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
     }
-    Expr parse(){
-        try {
-            return expression();
-        } catch (ParseError e) {
-            return null;
+    List<Stmt> parse(){
+        List<Stmt> statements = new ArrayList<>();
+        while(!isAtEnd()){
+            statements.add(statement());
         }
+        return statements;
+
     }
     private Expr expression(){
         return equality();
     }
+    private Stmt statement(){
+        if(match(PRINT)) return printStatement();
 
+        // BISAYA++
+        if(match(IPAKITA)) return ipakitaStatement();
+
+        return expressionStatement();
+    }
+    private Stmt printStatement(){
+        Expr value = expression();
+        consume(SEMICOLON,"Expect ';' after value");
+        return new Stmt.Print(value);
+    }
+    private Stmt expressionStatement(){
+        Expr expr = expression();
+        consume(SEMICOLON, "Expect ';' after value");
+        return new Stmt.Expression(expr);
+    }
+    // BISAYA++
+    private Stmt ipakitaStatement(){
+        Expr expr = expression();
+        consume(SEMICOLON, "Expect ':' after IPAKITA");
+        return new Stmt.Print(expr);
+    }
+
+
+    // ======================
     private Expr equality(){
         Expr expr = comparison();
 

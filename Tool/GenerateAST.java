@@ -21,6 +21,13 @@ public class GenerateAST {
             "Unary    : Token operator, Expr right"
             // ,"Variable : Token name, String type" // variables
         ));
+
+        defineAST(outputDir,"Stmt",Arrays.asList(
+            "Expression : Expr expression"
+            ,"Print      : Expr expression"
+            ,"Ipakita    : Expr expression"
+            
+        ));
     }
     // [15]
     private static void defineAST(String outputDir, String baseName, List<String> types) throws IOException{

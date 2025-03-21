@@ -16,13 +16,34 @@ public class Parser {
     List<Stmt> parse(){
         List<Stmt> statements = new ArrayList<>();
         while(!isAtEnd()){
-            statements.add(statement());
+            statements.add(declaration());
         }
         return statements;
 
     }
     private Expr expression(){
         return equality();
+    }
+    private Stmt declaration(){
+        try {
+            if(match(VAR)) return varDeclaration();
+            // TODO: MUGNA
+            return statement();
+        } catch (ParseError e) {
+            synchronize();
+            return null;
+        }
+    }
+    private Stmt varDeclaration(){
+        Token name = consume(IDENTIFIER, "Expect variable name");
+
+        Expr initializer = null;
+        if(match(EQUAL)){
+            System.out.println("pasok ka here 2");
+            initializer = expression();
+        }
+        consume(SEMICOLON, "Expect ';' after variable declarationzz");
+        return new Stmt.Var(name, initializer);
     }
     private Stmt statement(){
         if(match(PRINT)) return printStatement();
@@ -105,6 +126,10 @@ public class Parser {
         if(match(NUMBER,STRING)){
             return new Expr.Literal(previous().literal);
         }
+        if(match(IDENTIFIER)){
+            System.out.println("pasok ka hereeeeeeeee? ");
+            return new Expr.Variable(previous());
+        }
         if(match(LEFT_PAREN)){
             Expr expr = expression();
             consume(RIGHT_PARENT, "Expect ')' after expression." );
@@ -165,6 +190,10 @@ public class Parser {
                 case WHILE:
                 case PRINT:
                 case RETURN:
+
+                // BISAYA++
+                case MUGNA:
+
                     return;
             }
             advance();

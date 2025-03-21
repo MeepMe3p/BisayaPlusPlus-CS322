@@ -25,6 +25,7 @@ public class Scanner {
             scanToken();
         }
         tokens.add(new Token(TokenType.EOF,"",null,line));
+        System.out.println(tokens); // TODO: DEBUGGING REMOVE LATER
         return tokens;
     }
 
@@ -62,7 +63,7 @@ public class Scanner {
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;
             case '=':
-                addToken(match('=') ? EQUAL : NOT_EQUAL);
+                addToken(match('=') ? EQUAL_EQUAL : EQUAL);
                 break;
 
             case '<':
@@ -128,14 +129,15 @@ public class Scanner {
         String text = source.substring(start,current);
         TokenType type = keywords.get(text);
         // System.out.println(text);
-        if(type == null) 
+        if(type == null) {
             type = IDENTIFIER;
+        }
         if(type == IPAKITA && !match(':')){
             BisayaPlusPlus.error(line,"Expected ':' after IPAKITA");
         }
-        else{ // remove raning
-            addToken(type);
-        }
+        
+        addToken(type);
+        
     }
     // [11]
     private void string(){

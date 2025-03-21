@@ -1,11 +1,24 @@
 package BisayaPP;
 
+import BisayaPP.Expr.Variable;
 import BisayaPP.Stmt.Expression;
 import BisayaPP.Stmt.Ipakita;
 import BisayaPP.Stmt.Print;
+import BisayaPP.Stmt.Var;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
+    private Environment environment = new Environment();
+    // [18]
+    public void interpret(List<Stmt> statements){
+        try {
+            for(Stmt statement: statements){
+                execute(statement);
+            }
+        } catch (RuntimeError e) {
+            BisayaPlusPlus.runTimeError(e);
+        }
+    }
 
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
@@ -137,16 +150,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         return null;   
     }
     // =====================
-    // [18]
-    public void interpret(List<Stmt> statements){
-        try {
-            for(Stmt statement: statements){
-                execute(statement);
-            }
-        } catch (RuntimeError e) {
-            BisayaPlusPlus.runTimeError(e);
-        }
-    }
+
     // [17]
     private String stringify(Object object){
         if(object == null) return "nil";
@@ -158,6 +162,24 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             return text;
         }
         return object.toString();
+    }
+
+    @Override
+    public Void visitVarStmt(Var stmt) {
+        Object value = null;
+        System.out.println("pasok here 4");
+
+        if(stmt.initializer != null){
+            value = evaluate(stmt.initializer);
+        }
+        environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+
+    @Override
+    public Object visitVariableExpr(Variable expr) {
+        System.out.println("pasok here 3");
+        return environment.get(expr.name);
     }
 
 

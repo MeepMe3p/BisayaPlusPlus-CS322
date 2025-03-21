@@ -23,6 +23,10 @@
 [17] Turns the value into a string to be outputted in the terminal
 [18] the interpreter, scans line by line, breaks into tokens, parses and outputs
 
+// ENVIRONMENT
+[19] A map for the variables declared
+
+
 
 [EXTRAS] WITH DECIMAL
 [1.1] If has error exits duuuuuh (>_<)
@@ -71,6 +75,10 @@ statement      → exprStmt
 exprStmt       → expression ";" ;
 printStmt      → "print" expression ";" ;
 
+ASSIGNMENT
+expression     → assignment ;
+assignment     → IDENTIFIER "=" assignment
+               | equality ;
                
 javac -d . BisayaPP/*.java   # ComPILE
 javac -d . Tool/*.java # comPILE

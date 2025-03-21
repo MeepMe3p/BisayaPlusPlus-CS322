@@ -10,6 +10,7 @@ abstract class Stmt {
     R visitPrintStmt(Print stmt);
     R visitVarStmt(Var stmt);
     R visitIpakitaStmt(Ipakita stmt);
+    R visitMugnaStmt(Mugna stmt);
     }
   static class Expression extends Stmt {
     Expression(Expr expression) {
@@ -60,6 +61,22 @@ abstract class Stmt {
     }
 
     final Expr expression;
+  }
+  static class Mugna extends Stmt {
+    Mugna(Token name, List<Token> names, Expr initializer) {
+      this.name = name;
+      this.names = names;
+      this.initializer = initializer;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+    return visitor.visitMugnaStmt(this);
+    }
+
+    final Token name;
+    final List<Token> names;
+    final Expr initializer;
   }
 
     abstract <R> R accept(Visitor<R> visitor);

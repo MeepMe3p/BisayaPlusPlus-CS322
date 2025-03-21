@@ -22,7 +22,7 @@ public class Parser {
 
     }
     private Expr expression(){
-        return equality();
+        return assignment();
     }
     private Stmt declaration(){
         try {
@@ -39,7 +39,6 @@ public class Parser {
 
         Expr initializer = null;
         if(match(EQUAL)){
-            System.out.println("pasok ka here 2");
             initializer = expression();
         }
         consume(SEMICOLON, "Expect ';' after variable declarationzz");
@@ -63,6 +62,21 @@ public class Parser {
         consume(SEMICOLON, "Expect ';' after value");
         return new Stmt.Expression(expr);
     }
+    private Expr assignment() {
+        Expr expr = equality();
+        if(match(EQUAL)){
+            Token equals = previous();
+            Expr value = assignment();
+
+            if(expr instanceof Expr.Variable){
+                Token name = ((Expr.Variable) expr).name;
+                return new Expr.Assign(name,value);
+            }
+            error(equals,"Invalid assignment target.");
+        }
+        return expr;
+
+    }
     // BISAYA++
     private Stmt ipakitaStatement(){
         Expr expr = expression();
@@ -71,10 +85,12 @@ public class Parser {
 
 
     // ======================
+    // [20]
     private Expr equality(){
         Expr expr = comparison();
 
-        while (match(BANG_EQUAL, EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
+        while (match(BANG_EQUAL, EQUAL_EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
+            System.out.println("dapat di ka musud diri cuz = rmaan sha");
             Token operator = previous();
             Expr right = comparison();
             expr = new Expr.Binary(expr, operator, right);
@@ -127,7 +143,6 @@ public class Parser {
             return new Expr.Literal(previous().literal);
         }
         if(match(IDENTIFIER)){
-            System.out.println("pasok ka hereeeeeeeee? ");
             return new Expr.Variable(previous());
         }
         if(match(LEFT_PAREN)){

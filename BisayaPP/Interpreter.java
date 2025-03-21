@@ -1,8 +1,10 @@
 package BisayaPP;
 
+import BisayaPP.Expr.Assign;
 import BisayaPP.Expr.Variable;
 import BisayaPP.Stmt.Expression;
 import BisayaPP.Stmt.Ipakita;
+import BisayaPP.Stmt.Mugna;
 import BisayaPP.Stmt.Print;
 import BisayaPP.Stmt.Var;
 import java.util.List;
@@ -149,6 +151,11 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         System.out.println(stringify(value));
         return null;   
     }
+    @Override
+    public Void visitMugnaStmt(Mugna stmt) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'visitMugnaStmt'");
+    }
     // =====================
 
     // [17]
@@ -167,7 +174,6 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitVarStmt(Var stmt) {
         Object value = null;
-        System.out.println("pasok here 4");
 
         if(stmt.initializer != null){
             value = evaluate(stmt.initializer);
@@ -176,11 +182,21 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+
+
     @Override
     public Object visitVariableExpr(Variable expr) {
-        System.out.println("pasok here 3");
         return environment.get(expr.name);
     }
+
+    @Override
+    public Object visitAssignExpr(Assign expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
+    }
+
+
 
 
 

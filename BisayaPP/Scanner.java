@@ -25,7 +25,7 @@ public class Scanner {
             scanToken();
         }
         tokens.add(new Token(TokenType.EOF,"",null,line));
-        System.out.println(tokens); // TODO: DEBUGGING REMOVE LATER
+        // System.out.println(tokens); // TODO: DEBUGGING REMOVE LATER
         return tokens;
     }
 

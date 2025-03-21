@@ -15,19 +15,23 @@ public class GenerateAST {
         String outputDir = args[0];
 
         defineAST(outputDir,"Expr",Arrays.asList(
+            "Assign  : Token name, Expr value",
             "Binary   : Expr left, Token operator, Expr right", // TODO: edit this to have a type checking sincce "hello" + 1 should be wrong
             "Grouping : Expr expression",
             "Literal  : Object value",
             "Unary    : Token operator, Expr right",
             "Variable : Token name" 
+            // BISAYA++
         ));
 
         defineAST(outputDir,"Stmt",Arrays.asList(
             "Expression : Expr expression"
             ,"Print      : Expr expression"
             ,"Var        : Token name, Expr initializer"
+
             // BISAYA++
             ,"Ipakita    : Expr expression"
+            ,"Mugna        : Token name, List<Token> names, Expr initializer"
             
         ));
     }

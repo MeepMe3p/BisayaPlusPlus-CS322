@@ -28,6 +28,7 @@ public class Parser {
         try {
             if(match(VAR)) return varDeclaration();
             // TODO: MUGNA
+            if(match(MUGNA)) return mugnaDeclaration();
             return statement();
         } catch (ParseError e) {
             synchronize();
@@ -81,6 +82,39 @@ public class Parser {
     private Stmt ipakitaStatement(){
         Expr expr = expression();
         return new Stmt.Ipakita(expr);
+    }
+    // [21]
+    private Stmt mugnaDeclaration(){
+        Token type;
+        if(match(NUMERO)){
+            type = previous();
+        } else if(match(TIPIK)){
+            type = previous();
+        } else if(match(LETRA)){
+            type = previous();
+        } else if(match(TINUOD)){
+            type = previous();
+        } else{
+            throw error(peek(), "After MUGNA Expect a data type.");
+        }
+        List<Token> names = new ArrayList<>();
+
+        names.add(consume(IDENTIFIER, "Expect variable name"));
+        while(match(COMMA)){
+            System.out.println("went hereeee!!");
+            names.add(consume(IDENTIFIER, "Expect variable name"));
+        }
+        Expr initializer = null;
+        if(match(EQUAL)){
+            initializer = expression();
+        }
+        System.out.println("nipasok here squared" + peek().type);
+        consume(SEMICOLON, "Expect ';' after variable declarationzz");
+        System.out.println("After");
+
+        System.out.println("The names"+names);
+        return new Stmt.Mugna(type,names,initializer);
+    
     }
 
 
@@ -139,7 +173,9 @@ public class Parser {
         if(match(TRUE)) return new Expr.Literal(true);
         if(match(NIL)) return new Expr.Literal(null);
 
-        if(match(NUMBER,STRING)){
+        if(match(NUMBER,STRING,CHAR)){
+            System.out.println("nipasok here: "+previous().type);
+            System.out.print(previous().literal);
             return new Expr.Literal(previous().literal);
         }
         if(match(IDENTIFIER)){

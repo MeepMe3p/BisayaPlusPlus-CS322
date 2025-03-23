@@ -10,7 +10,7 @@ public enum TokenType {
     EQUAL, EQUAL_EQUAL, LESS, LESS_EQUAL, GREATER, GREATER_EQUAL, NOT_EQUAL,
 
 //    Literals - lexemes where you need to traverse to identify
-    IDENTIFIER, STRING, NUMBER,
+    IDENTIFIER, STRING, NUMBER, CHAR,
 
 //    Keywords
     AND, ELSE, FALSE, FOR, IF,NIL,OR, PRINT,RETURN, TRUE, WHILE, VAR, START,END,

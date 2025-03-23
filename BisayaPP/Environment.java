@@ -24,4 +24,24 @@ class Environment {
         }
         throw new RuntimeError(name, "Undefined variable '"+ name.lexeme+"'.");
     }
+    void define(Token name, String dataType, Object value){
+        if(typeCheck(dataType, value)){
+            System.out.println("Type: "+ dataType+ "  Name = "+ value);
+            values.put(name.lexeme,value);
+        } else{
+            System.out.println("DATA TYPE OF VALUE IS: "+ value.getClass());
+            throw new RuntimeError(name,"Type mismatch: Expected "+dataType+ "but is "+ value);
+        }
+    }
+
+    private boolean typeCheck(String dataType, Object value){
+        switch(dataType){
+            case "NUMERO": return value instanceof Integer;
+            case "TIPIK": return value instanceof Double;
+            case "LETRA": return value instanceof String;
+            case "TINUOD": return value instanceof Boolean;
+            
+        }
+        return false;
+    }
 }

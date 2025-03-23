@@ -111,6 +111,9 @@ public class Scanner {
             case '"':
                 string();
                 break;
+            case '\'':
+                character();
+                break;
         default:
                 if(isDigit(c)){
                     number();
@@ -153,16 +156,46 @@ public class Scanner {
         String value = source.substring(start+1,current-1);
         addToken(STRING,value);
     }
+    private void character() {
+        System.out.println(peek());
+
+        char value = source.charAt(start+1);
+        advance();
+        System.out.println(peek()+"1");
+        advance();
+        System.out.println(peek()+"2");
+        System.out.println("value: "+value);
+    }
+    
+    
     private void number(){
-        while(isDigit(peek()))
+        // while(isDigit(peek()))
+        //     advance();
+        // if(peek() == '.' && isDigit(peekNext())){
+        //     advance();
+        //     while(isDigit(peek()))
+        //         advance();
+        // }
+        // addToken(NUMBER, Double.parseDouble(source.substring(start,current)));
+        while (isDigit(peek())) 
+        advance();
+
+        boolean isFloat = false;
+
+        if (peek() == '.' && isDigit(peekNext())) {
+            isFloat = true; 
             advance();
-        if(peek() == '.' && isDigit(peekNext())){
-            advance();
-            while(isDigit(peek()))
+            
+            while (isDigit(peek())) 
                 advance();
         }
-        addToken(NUMBER, Double.parseDouble(source.substring(start,current)));
-
+        String numberLiteral = source.substring(start, current);
+     
+        if (isFloat) {
+            addToken(NUMBER, Double.parseDouble(numberLiteral));
+        } else {
+            addToken(NUMBER, Integer.parseInt(numberLiteral)); 
+        }
     }
     // [10]
     private boolean match(char next) {
@@ -241,7 +274,7 @@ public class Scanner {
         keywords.put("PUNDOK",  PUNDOK);
         keywords.put("ALANGSA",  ALANGSA);
         keywords.put("NUMERO",  NUMERO);
-        keywords.put("LETRA",  TIPIK);
+        keywords.put("LETRA",  LETRA);
         keywords.put("TINUOD",  TINUOD);
         keywords.put("UG",  UG);
         keywords.put("O",  O);

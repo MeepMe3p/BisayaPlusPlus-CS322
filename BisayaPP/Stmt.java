@@ -63,8 +63,8 @@ abstract class Stmt {
     final Expr expression;
   }
   static class Mugna extends Stmt {
-    Mugna(Token name, List<Token> names, Expr initializer) {
-      this.name = name;
+    Mugna(Token type, List<Token> names, Expr initializer) {
+      this.type = type;
       this.names = names;
       this.initializer = initializer;
     }
@@ -74,7 +74,7 @@ abstract class Stmt {
     return visitor.visitMugnaStmt(this);
     }
 
-    final Token name;
+    final Token type;
     final List<Token> names;
     final Expr initializer;
   }

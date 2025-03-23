@@ -130,6 +130,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     private void execute(Stmt stmt){
         stmt.accept(this);
     }
+    
 
     @Override
     public Void visitExpressionStmt(Expression stmt) {
@@ -153,8 +154,27 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     }
     @Override
     public Void visitMugnaStmt(Mugna stmt) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visitMugnaStmt'");
+        System.out.println("went here");
+        // System.out.println("Type:"+stmt.type);
+        // System.out.println("Names:"+stmt.names);
+        
+        Object value = null;
+        Token dataType = stmt.type;
+        if(stmt.initializer != null){
+            value = evaluate(stmt.initializer);
+        }
+        for(Token name: stmt.names){
+            System.out.println("Type: "+ dataType.lexeme+ " "+ name.lexeme + " = " +value);
+            environment.define(name, dataType.lexeme , value);
+        }
+        // System.out.println("Initi:"+value);
+
+
+        
+
+
+
+        return null;
     }
     // =====================
 

@@ -27,7 +27,7 @@ public class BisayaPlusPlus {
             }
         }else{
             try {
-                System.out.println("aaaa");
+                System.out.println();
                 runPrompt();
             } catch (IOException ex) {
             }
@@ -53,7 +53,7 @@ public class BisayaPlusPlus {
 //  [1.3]
 //  [T1]
         for(;;){
-            System.out.println("> ");
+            System.out.print("> ");
             String line = reader.readLine();
             if(line == null) break;
             run(line);
@@ -67,15 +67,16 @@ public class BisayaPlusPlus {
         Scanner scanner = new Scanner(source);
         List <Token> tokens = scanner.scanTokens();
 
+
         Parser parser = new Parser(tokens);
         List<Stmt> statements = parser.parse();
 
-        if(hadError) return;
-
-        // System.out.println(new AstPrinter().print(expression));
         // for(Token token: tokens){
         //     System.out.println(token);
         // }
+        if(hadError) return;
+
+        // System.out.println(new AstPrinter().print(expression));
 
         interpreter.interpret(statements);
     }

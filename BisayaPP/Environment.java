@@ -24,6 +24,15 @@ class Environment {
         }
         throw new RuntimeError(name, "Undefined variable '"+ name.lexeme+"'.");
     }
+    void assign(Token name, String dataType, Object value){
+        if(typeCheck(dataType, value)){
+            if(values.containsKey(name.lexeme)){
+                values.put(name.lexeme, value);
+                return;
+            }
+        }
+        throw new RuntimeError(name, "Variable '"+ name.lexeme+" not declared. ");
+    }
     void define(Token name, String dataType, Object value){
         if(typeCheck(dataType, value)){
             System.out.println("Type: "+ dataType+ "  Name = "+ value);
@@ -38,10 +47,21 @@ class Environment {
         switch(dataType){
             case "NUMERO": return value instanceof Integer;
             case "TIPIK": return value instanceof Double;
-            case "LETRA": return value instanceof String;
+            case "LETRA": return value instanceof Character;
             case "TINUOD": return value instanceof Boolean;
             
         }
         return false;
+    }
+    String getType(Token name,Object value){
+        // System.out.println("VALUE CLASS IS: "+value.getClass() + "Value is an instance of NUMERO"+(value instanceof Integer));
+        // return value.getClass();
+        if(value instanceof Integer) return "NUMERO";
+        if(value instanceof Double) return "TIPIK";
+        if(value instanceof Character) return "LETRA";
+        if(value instanceof Boolean) return "TINUOD";
+
+        throw new RuntimeError(name,"Type mismatch: Expected "+get(name).getClass().getSimpleName()+ "but value is "+ value.getClass().getSimpleName());
+        // return null;
     }
 }

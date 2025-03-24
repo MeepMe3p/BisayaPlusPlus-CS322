@@ -141,7 +141,8 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitPrintStmt(Print stmt) {
         Object value = evaluate(stmt.expression);
-        System.out.println(stringify(value));
+        System.out.println();
+        // System.out.println(stringify(value));
         return null;
     }
     
@@ -212,15 +213,18 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitAssignExpr(Assign expr) {
         Object value = evaluate(expr.value);
-        environment.assign(expr.name, value);
+        Object tk = environment.get(expr.name);
+        System.out.println("The ttoken is: "+tk);
+        String dataType = environment.getType(expr.name,value);
+        environment.assign(expr.name, dataType, value);
         return value;
     }
 
-
-
-
-
-
-
+    @Override
+    public Object visitAssignBisExpr(Expr.AssignBis expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, expr.type.lexeme, value);
+        return value;
+    }
 
 }

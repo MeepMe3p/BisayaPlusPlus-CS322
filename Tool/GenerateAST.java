@@ -22,6 +22,7 @@ public class GenerateAST {
             "Unary    : Token operator, Expr right",
             "Variable : Token name" 
             // BISAYA++
+            , "AssignBis: Token type, Token name, Expr value"
         ));
 
         defineAST(outputDir,"Stmt",Arrays.asList(

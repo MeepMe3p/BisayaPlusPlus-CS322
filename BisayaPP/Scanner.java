@@ -113,6 +113,7 @@ public class Scanner {
                 break;
             case '\'':
                 character();
+                System.out.println("character went here");
                 break;
         default:
                 if(isDigit(c)){
@@ -157,14 +158,25 @@ public class Scanner {
         addToken(STRING,value);
     }
     private void character() {
-        System.out.println(peek());
+        if(isAtEnd()){
+            BisayaPlusPlus.error(line,"Unterminated character,");
+            return;
+        }
+        System.out.println(peek()+"this is peak");
 
         char value = source.charAt(start+1);
+        // System.out.println(current - start+" This is start - current");
+        if (current - start != 2) {  
+            System.out.println(current + " - " + start +" != " + (current - start));
+            BisayaPlusPlus.error(line, "Character literals must have exactly one character.");
+            return;
+        }
         advance();
         System.out.println(peek()+"1");
+        System.out.println(peekNext()+"2");
         advance();
-        System.out.println(peek()+"2");
         System.out.println("value: "+value);
+        addToken(CHAR, value);
     }
     
     

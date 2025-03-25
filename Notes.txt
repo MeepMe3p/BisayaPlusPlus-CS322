@@ -91,5 +91,10 @@ java BisayaPP.BisayaPlusPlus   # RUUUN
 
 
 TODO:
-- IMPLEMENT '&' CONCAT
-- STATIC TTYPES
+- IMPLEMENT '&' CONCAT ===== DONE
+- STATIC TTYPES        ===== DONE
+- FIX REDUNDANT SA PARSER (PRIORITY)
+- $ (new line)
+- OO is true
+- DILI is false
+- [] <-- used for characters instead of ''

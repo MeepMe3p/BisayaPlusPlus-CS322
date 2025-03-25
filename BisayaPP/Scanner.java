@@ -49,7 +49,7 @@ public class Scanner {
 
             // case '/':addToken(BisayaPP.TokenType.SLASH);break;
             case '%':addToken(MODULO);break;
-//            case '&':addToken(BisayaPP.TokenType.CONCAT);break;
+           case '&':addToken(CONCAT);break;
             case '-':
                 if(match('-')){
                     // for comments 
@@ -113,7 +113,7 @@ public class Scanner {
                 break;
             case '\'':
                 character();
-                System.out.println("character went here");
+                // System.out.println("character went here");
                 break;
         default:
                 if(isDigit(c)){
@@ -158,24 +158,34 @@ public class Scanner {
         addToken(STRING,value);
     }
     private void character() {
-        if(isAtEnd()){
-            BisayaPlusPlus.error(line,"Unterminated character,");
-            return;
-        }
-        System.out.println(peek()+"this is peak");
+        
+        // System.out.println(peek()+"this is peak");
 
         char value = source.charAt(start+1);
         // System.out.println(current - start+" This is start - current");
-        if (current - start != 2) {  
-            System.out.println(current + " - " + start +" != " + (current - start));
-            BisayaPlusPlus.error(line, "Character literals must have exactly one character.");
+        // if (current - start != 2) {  
+        //     System.out.println(current + " - " + start +" != " + (current - start));
+        //     BisayaPlusPlus.error(line, "Character literals must have exactly one character.");
+        //     return;
+        // }
+
+        advance();
+        // System.out.println(peek()+"1");
+        // System.out.println(peekNext()+"2");
+        if(peek() != '\''){
+            if(isAtEnd()){
+                BisayaPlusPlus.error(line,"Unterminated character,");
+                return;
+            }
+            while(!isAtEnd()){
+                // System.out.println("Peak: "+peek());
+                advance();
+            }
+            BisayaPlusPlus.error(line, "Character literals must have exactly one character");
             return;
-        }
+        } 
+        // System.out.println("value: "+value);
         advance();
-        System.out.println(peek()+"1");
-        System.out.println(peekNext()+"2");
-        advance();
-        System.out.println("value: "+value);
         addToken(CHAR, value);
     }
     

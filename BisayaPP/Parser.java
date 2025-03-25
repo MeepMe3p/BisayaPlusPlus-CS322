@@ -71,7 +71,7 @@ public class Parser {
 
             if(expr instanceof Expr.Variable){
                 Token name = ((Expr.Variable) expr).name;
-                System.out.println("nipasok here");
+                // System.out.println("nipasok here");
                 return new Expr.Assign(name,value);
             }
             error(equals,"Invalid assignment target.");
@@ -102,7 +102,7 @@ public class Parser {
 
         names.add(consume(IDENTIFIER, "Expect variable name"));
         while(match(COMMA)){
-            System.out.println("went hereeee!!");
+            // System.out.println("went hereeee!!");
             names.add(consume(IDENTIFIER, "Expect variable name"));
         }
         Expr initializer = null;
@@ -112,9 +112,9 @@ public class Parser {
         // System.out.println("nipasok here squared" + peek().type);
         // consume(SEMICOLON, "Expect ';' after variable declarationzz");
 
-        System.out.println("After");
+        // System.out.println("After");
 
-        System.out.println("The names"+names+" The type "+ type+" The initializer"+initializer);
+        // System.out.println("The names"+names+" The type "+ type+" The initializer"+initializer);
         return new Stmt.Mugna(type,names,initializer);
     
     }
@@ -126,7 +126,7 @@ public class Parser {
         Expr expr = comparison();
 
         while (match(BANG_EQUAL, EQUAL_EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
-            System.out.println("dapat di ka musud diri cuz = rmaan sha");
+            // System.out.println("dapat di ka musud diri cuz = rmaan sha");
             Token operator = previous();
             Expr right = comparison();
             expr = new Expr.Binary(expr, operator, right);
@@ -146,7 +146,7 @@ public class Parser {
     private Expr term(){
         Expr expr = factor();
 
-        while(match(MINUS, PLUS)){
+        while(match(MINUS, PLUS,CONCAT)){
             Token operator = previous();
             Expr right = factor();
             expr = new Expr.Binary(expr, operator, right);
@@ -177,8 +177,8 @@ public class Parser {
 
         if(match(NUMBER,STRING,CHAR)){
             // System.out.println("nipasok here: "+previous().type);
-            System.out.println("pasok ka hereeeeee??");
-            System.out.print(previous().literal);
+            // System.out.println("pasok ka hereeeeee??");
+            // System.out.print(previous().literal);
             return new Expr.Literal(previous().literal);
         }
         if(match(IDENTIFIER)){

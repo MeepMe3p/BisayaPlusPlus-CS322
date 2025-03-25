@@ -29,37 +29,93 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         Object right = evaluate(expr.right);
         switch(expr.operator.type){
             case GREATER: 
-                checkNumberOperands(expr.operator, left,right);
-                return (double) left > (double) right;
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        return (double) turnToDouble(left) > (double) turnToDouble(right);
+                    }
+                    return (int) left > (int) right;
+                }
+                // checkNumberOperands(expr.operator, left,right);
+                // return (double) left > (double) right;
+                
             case GREATER_EQUAL: 
-
-                checkNumberOperands(expr.operator, left,right);
-                return (double) left >= (double) right;
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        return (double) turnToDouble(left) >= (double) turnToDouble(right);
+                    }
+                    return (int) left >= (int) right;
+                }
+                // checkNumberOperands(expr.operator, left,right);
+                // return (double) left >= (double) right;
             case LESS: 
-                checkNumberOperands(expr.operator, left,right);
-                return (double) left < (double) right;
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        return (double) turnToDouble(left) < (double) turnToDouble(right);
+                    }
+                    return (int) left < (int) right;
+                }
+                // checkNumberOperands(expr.operator, left,right);
+                // return (double) left < (double) right;
             case LESS_EQUAL: 
-                checkNumberOperands(expr.operator, left,right);
-                return (double) left <= (double) right;
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        return (double) turnToDouble(left) <= (double) turnToDouble(right);
+                    }
+                    return (int) left <= (int) right;
+                }
+                // checkNumberOperands(expr.operator, left,right);
+                // return (double) left <= (double) right;
             // TODO: REMOVE LATER=====================v
             case BANG_EQUAL:
-                checkNumberOperands(expr.operator, left,right);
-                return !isEqual(left,right);
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        return (double) turnToDouble(left) != (double) turnToDouble(right);
+                    }
+                    return (int) left != (int) right;
+                }
+                // checkNumberOperands(expr.operator, left,right);
+                // return !isEqual(left,right);
                 // TODO: REMOVE LATER=====================^
                 
             case NOT_EQUAL:
-                checkNumberOperands(expr.operator, left,right);
-                return !isEqual(left,right);
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        return (double) turnToDouble(left) != (double) turnToDouble(right);
+                    }
+                    return (int) left != (int) right;
+                }
+                // checkNumberOperands(expr.operator, left,right);
+                // return !isEqual(left,right);
             case EQUAL:
-                checkNumberOperands(expr.operator, left,right);
-                return isEqual(left,right);
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        return (double) turnToDouble(left) == (double) turnToDouble(right);
+                    }
+                    return (int) left == (int) right;
+                }
+                // checkNumberOperands(expr.operator, left,right);
+                // return isEqual(left,right);
             
             case MINUS:
-                checkNumberOperands(expr.operator, left,right);
-                return (double) left - (double) right;
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        return (double) turnToDouble(left) - (double) turnToDouble(right);
+                    }
+                    return (int) left - (int) right;
+                }
+                // checkNumberOperands(expr.operator, left,right);
+                // return (double) left - (double) right;
             case PLUS:
-                if(left instanceof Double && right instanceof Double){
-                    return (double) left + (double) right;
+                // if(left instanceof Double && right instanceof Double){
+                if(left instanceof Number && right instanceof Number){
+                    if((left instanceof Double) || (right instanceof Double)){
+                        // System.out.println("atleast one is double");
+                        return (double) turnToDouble(left) + (double) turnToDouble(right);
+                    }
+                    // System.out.println("both are int");
+                    return (int) left + (int) right;
+                    
+                    // return (double) left + (double) right;
                 }
                 if(left instanceof String && right instanceof String){
                     return (String) left + (String) right;
@@ -71,14 +127,34 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             case STAR: 
                 checkNumberOperands(expr.operator, left,right);
                 return (double) left * (double) right;
+            
+            case CONCAT:
+                if(left instanceof String && right instanceof String){
+                return (String) left + (String) right;
+                }
+                
+                return left.toString() + right.toString();
+                // BisayaPlusPlus.error(1, "mali ka huhu");
 
         }
 
         return null;
                 
     }
+    private Double turnToDouble(Object num){
+        if(num instanceof Integer){
+            return (double) ((Integer) num).intValue();
+        }
+        return (double)num;
+    }
+    // private void checkOperation(Object left, Object right, Token operator){
+    //     if((left instanceof Number) && (right instanceof Number)) return;
+    //     throw new RuntimeError(operator, "Cannot "+operator.lexeme+ " "+ left.getClass().getSimpleName()+ " and "+  right.getClass().getSimpleName());
+    // }
+    // private void performOperation(Object left, Object right)
     private void checkNumberOperands(Token operator, Object left, Object right){
-        if(left instanceof Double && right instanceof Double) return;
+        // if(left instanceof Double && right instanceof Double) return;
+        if(left instanceof Number && right instanceof Number) return;
         throw new RuntimeError(operator, "Operands must be a number");
     }
 
@@ -110,6 +186,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         }
         return null;
     }
+    
     private void checkNumberOperand(Token operator, Object operand){
         if(operand instanceof Double) return;
         throw new RuntimeError(operator, "Operand must be a number");
@@ -155,7 +232,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     }
     @Override
     public Void visitMugnaStmt(Mugna stmt) {
-        System.out.println("went here");
+        // System.out.println("went here");
         // System.out.println("Type:"+stmt.type);
         // System.out.println("Names:"+stmt.names);
         
@@ -165,7 +242,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             value = evaluate(stmt.initializer);
         }
         for(Token name: stmt.names){
-            System.out.println("Type: "+ dataType.lexeme+ " "+ name.lexeme + " = " +value);
+            // System.out.println("Type: "+ dataType.lexeme+ " "+ name.lexeme + " = " +value);
             environment.define(name, dataType.lexeme , value);
         }
         // System.out.println("Initi:"+value);
@@ -214,7 +291,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     public Object visitAssignExpr(Assign expr) {
         Object value = evaluate(expr.value);
         Object tk = environment.get(expr.name);
-        System.out.println("The ttoken is: "+tk);
+        // System.out.println("The ttoken is: "+tk);
         String dataType = environment.getType(expr.name,value);
         environment.assign(expr.name, dataType, value);
         return value;

@@ -35,10 +35,10 @@ class Environment {
     }
     void define(Token name, String dataType, Object value){
         if(typeCheck(dataType, value)){
-            System.out.println("Type: "+ dataType+ "  Name = "+ value);
+            // System.out.println("Type: "+ dataType+ "  Name = "+ value);
             values.put(name.lexeme,value);
         } else{
-            System.out.println("DATA TYPE OF VALUE IS: "+ value.getClass());
+            // System.out.println("DATA TYPE OF VALUE IS: "+ value.getClass());
             throw new RuntimeError(name,"Type mismatch: Expected "+dataType+ "but is "+ value);
         }
     }

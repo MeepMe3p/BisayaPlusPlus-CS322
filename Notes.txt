@@ -26,9 +26,11 @@
 // INTERPRETER
 [17] Turns the value into a string to be outputted in the terminal
 [18] the interpreter, scans line by line, breaks into tokens, parses and outputs
+[22] for performing operations, cehcks if one number is a double then return double one of it is, int if not, 
 
 // ENVIRONMENT
 [19] A map for the variables declared
+
 
 
 

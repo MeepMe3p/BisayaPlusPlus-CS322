@@ -27,131 +27,55 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         // System.out.println("binary");
         Object left = evaluate(expr.left);
         Object right = evaluate(expr.right);
-        switch(expr.operator.type){
-            case GREATER: 
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        return (double) turnToDouble(left) > (double) turnToDouble(right);
-                    }
-                    return (int) left > (int) right;
-                }
-                // checkNumberOperands(expr.operator, left,right);
-                // return (double) left > (double) right;
-                
-            case GREATER_EQUAL: 
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        return (double) turnToDouble(left) >= (double) turnToDouble(right);
-                    }
-                    return (int) left >= (int) right;
-                }
-                // checkNumberOperands(expr.operator, left,right);
-                // return (double) left >= (double) right;
-            case LESS: 
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        return (double) turnToDouble(left) < (double) turnToDouble(right);
-                    }
-                    return (int) left < (int) right;
-                }
-                // checkNumberOperands(expr.operator, left,right);
-                // return (double) left < (double) right;
-            case LESS_EQUAL: 
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        return (double) turnToDouble(left) <= (double) turnToDouble(right);
-                    }
-                    return (int) left <= (int) right;
-                }
-                // checkNumberOperands(expr.operator, left,right);
-                // return (double) left <= (double) right;
-            // TODO: REMOVE LATER=====================v
-            case BANG_EQUAL:
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        return (double) turnToDouble(left) != (double) turnToDouble(right);
-                    }
-                    return (int) left != (int) right;
-                }
-                // checkNumberOperands(expr.operator, left,right);
-                // return !isEqual(left,right);
-                // TODO: REMOVE LATER=====================^
-                
-            case NOT_EQUAL:
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        return (double) turnToDouble(left) != (double) turnToDouble(right);
-                    }
-                    return (int) left != (int) right;
-                }
-                // checkNumberOperands(expr.operator, left,right);
-                // return !isEqual(left,right);
-            case EQUAL:
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        return (double) turnToDouble(left) == (double) turnToDouble(right);
-                    }
-                    return (int) left == (int) right;
-                }
-                // checkNumberOperands(expr.operator, left,right);
-                // return isEqual(left,right);
-            
-            case MINUS:
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        return (double) turnToDouble(left) - (double) turnToDouble(right);
-                    }
-                    return (int) left - (int) right;
-                }
-                // checkNumberOperands(expr.operator, left,right);
-                // return (double) left - (double) right;
-            case PLUS:
-                // if(left instanceof Double && right instanceof Double){
-                if(left instanceof Number && right instanceof Number){
-                    if((left instanceof Double) || (right instanceof Double)){
-                        // System.out.println("atleast one is double");
-                        return (double) turnToDouble(left) + (double) turnToDouble(right);
-                    }
-                    // System.out.println("both are int");
-                    return (int) left + (int) right;
-                    
-                    // return (double) left + (double) right;
-                }
-                if(left instanceof String && right instanceof String){
-                    return (String) left + (String) right;
-                }
-                throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings.");
-            case SLASH: 
-                checkNumberOperands(expr.operator, left,right);
-                return (double) left / (double) right;
-            case STAR: 
-                checkNumberOperands(expr.operator, left,right);
-                return (double) left * (double) right;
-            
-            case CONCAT:
-                if(left instanceof String && right instanceof String){
-                return (String) left + (String) right;
-                }
-                
+
+        if (expr.operator.type == TokenType.PLUS) {
+            if (left instanceof String || right instanceof String) {
                 return left.toString() + right.toString();
-                // BisayaPlusPlus.error(1, "mali ka huhu");
-
+            }
         }
 
-        return null;
-                
-    }
-    private Double turnToDouble(Object num){
-        if(num instanceof Integer){
-            return (double) ((Integer) num).intValue();
+        if(left instanceof Number && right instanceof Number){
+            Number numLeft = toNumber(left);
+            Number numRight = toNumber(right);
+
+            switch(expr.operator.type){
+                case GREATER: return numLeft.doubleValue() > numRight.doubleValue();
+                case GREATER_EQUAL: return numLeft.doubleValue() >= numRight.doubleValue();
+                case LESS: return numLeft.doubleValue() < numRight.doubleValue();
+                case LESS_EQUAL: return numLeft.doubleValue() <= numRight.doubleValue();
+                case BANG_EQUAL: 
+                case NOT_EQUAL: return !numLeft.equals(numRight);
+                case EQUAL: return numLeft.equals(numRight);
+                case MINUS: return performOperation(numLeft, numRight, '-');
+                case PLUS: return performOperation(numLeft, numRight, '+');
+                case SLASH: 
+                    if (numRight.doubleValue() == 0) {
+                        throw new RuntimeError(expr.operator, "Dili kadivide ug zero.");
+                    }
+                    return numLeft.doubleValue() / numRight.doubleValue();
+                case STAR: return performOperation(numLeft, numRight, '*');
+            }
         }
-        return (double)num;
+        if(expr.operator.type == TokenType.CONCAT){
+            return left.toString() + right.toString();
+        }
+        throw new RuntimeError(expr.operator, "Kailangan duha ka string or duha ka numero.");
     }
-    // private void checkOperation(Object left, Object right, Token operator){
-    //     if((left instanceof Number) && (right instanceof Number)) return;
-    //     throw new RuntimeError(operator, "Cannot "+operator.lexeme+ " "+ left.getClass().getSimpleName()+ " and "+  right.getClass().getSimpleName());
-    // }
-    // private void performOperation(Object left, Object right)
+    private Number toNumber(Object obj) {
+        if (obj instanceof Integer) return (Integer) obj;
+        if (obj instanceof Double) return (Double) obj;
+        throw new RuntimeError(null, "Operand must be a number.");
+    }
+
+    private Number performOperation(Number left, Number right, char operation){
+        boolean isDouble = (left instanceof Double) || (right instanceof Double);
+        switch(operation){
+            case '+': return isDouble ? left.doubleValue() + right.doubleValue() : left.intValue() + right.intValue();
+            case '-': return isDouble ? left.doubleValue() - right.doubleValue() : left.intValue() - right.intValue();
+            case '*': return isDouble ? left.doubleValue() * right.doubleValue() : left.intValue() * right.intValue();
+            default: throw new RuntimeError(null, "Unknown operator");
+        }
+    }
     private void checkNumberOperands(Token operator, Object left, Object right){
         // if(left instanceof Double && right instanceof Double) return;
         if(left instanceof Number && right instanceof Number) return;

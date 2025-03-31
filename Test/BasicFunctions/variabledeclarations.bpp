@@ -1,0 +1,12 @@
+SUGOD
+    MUGNA NUMERO num = 1
+    MUGNA TIPIK dec = 1.5
+    MUGNA LETRA let = 'A'
+    MUGNA TINUOD t = true
+
+    IPAKITA: "NUMERO: " & num
+    IPAKITA: "TIPIK: " & dec
+    IPAKITA: "LETRA: " & let
+    IPAKITA: "TINUOD: " & t
+
+KATAPUSAN

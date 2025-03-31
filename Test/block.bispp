@@ -1,3 +1,4 @@
+SUGOD
 MUGNA NUMERO x = 1
 MUGNA NUMERO y = 2
 MUGNA NUMERO z = 3
@@ -5,6 +6,7 @@ MUGNA NUMERO z = 3
 {
   MUGNA NUMERO x = 10
   MUGNA NUMERO y = 20
+  x = x+1
   {
     MUGNA NUMERO x = 100
     IPAKITA: "Inner: " & x
@@ -19,3 +21,4 @@ MUGNA NUMERO z = 3
 IPAKITA: "Global: " & x
 IPAKITA: "Global: " & y
 IPAKITA: "Global: " & z
+KATAPUSAN

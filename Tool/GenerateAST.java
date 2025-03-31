@@ -16,9 +16,10 @@ public class GenerateAST {
 
         defineAST(outputDir,"Expr",Arrays.asList(
             "Assign  : Token name, Expr value",
-            "Binary   : Expr left, Token operator, Expr right", // TODO: edit this to have a type checking sincce "hello" + 1 should be wrong
+            "Binary   : Expr left, Token operator, Expr right",
             "Grouping : Expr expression",
             "Literal  : Object value",
+            "Logical  : Expr left, Token operator, Expr right",
             "Unary    : Token operator, Expr right",
             "Variable : Token name" 
             // BISAYA++
@@ -31,7 +32,8 @@ public class GenerateAST {
             ,"Print      : Expr expression"
             ,"Var        : Token name, Expr initializer"
             ,"If         : Expr condition, Stmt thenBranch," +
-            " Stmt elseBranch"
+            " Stmt elseBranch",
+            "While       : Expr condition, Stmt body"
 
             // BISAYA++
             ,"Ipakita    : Expr expression"

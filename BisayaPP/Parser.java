@@ -2,7 +2,9 @@ package BisayaPP;
 
 import static BisayaPP.TokenType.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 public class Parser {
 
     private static class ParseError extends RuntimeException{}
@@ -54,18 +56,66 @@ public class Parser {
         consume(SEMICOLON, "Expect ';' after variable declarationzz");
         return new Stmt.Var(name, initializer);
     }
+    private Stmt whileStatement(){
+        consume(LEFT_PAREN,"Expect '(' after 'while'");
+        Expr condition = expression();
+        consume(RIGHT_PARENT,"Expect ')' after condition");
+        consume(PUNDOK, "Kulangan ug pundok");
+        Stmt body = statement();
+        return new Stmt.While(condition,body);
+
+    }
     private Stmt statement(){
+        if(match(ALANGSA)) return forStatement();
         if(match(IF)) return ifStatement();
         
         if(match(PRINT)) return printStatement();
         if(match(LEFT_BRACE)) return new Stmt.Block(block());
-
+        if(match(WHILE)) return whileStatement();
         // BISAYA++
         if(match(IPAKITA)) return ipakitaStatement();
         if(match(KUNG)) return kungStatement();
 
 
+
         return expressionStatement();
+    }
+    private Stmt forStatement(){
+        consume(LEFT_PAREN, "Expect '(' after for");
+        Stmt initializer;
+        if(match(COMMA)){
+            initializer = null;
+        }else if(match(VAR)){// TODO: Edit using mugna
+            initializer = varDeclaration();
+        } else{
+            initializer = expressionStatement();
+        }
+        Expr condition = null;
+        if(!check(COMMA)){
+            condition = expression();
+        }
+        consume(COMMA, "Exprct comma after loop condition");
+
+        Expr increment = null;
+        if (!check(RIGHT_PARENT)) {
+          increment = expression();
+        }
+        consume(RIGHT_PARENT, "Expect ')' after for clauses.");
+        consume(PUNDOK, "pundok napud kulang");
+        Stmt body = statement();
+
+        if(increment != null){
+            body = new Stmt.Block(Arrays.asList(body, new Stmt.Expression(increment)));
+        }
+        if(condition == null){} condition = new Expr.Literal(true);
+        body = new Stmt.While(condition, body);
+
+        if(initializer != null){
+            body = new Stmt.Block(Arrays.asList(initializer, body));
+        }
+
+        return body;
+
     }
     private Stmt ifStatement(){
         consume(LEFT_PAREN, "Expect '(' after 'if'.");
@@ -128,7 +178,8 @@ public class Parser {
         return statements;
     }
     private Expr assignment() {
-        Expr expr = equality();
+        // Expr expr = equality();
+        Expr expr = or();
         if(match(EQUAL)){
             Token equals = previous();
             Expr value = assignment();
@@ -143,6 +194,25 @@ public class Parser {
         return expr;
 
     }
+    private Expr or(){
+        Expr expr = and();
+        while(match(O)){
+            Token operator=  previous();
+            Expr right = and();
+            expr = new Expr.Logical(expr,operator,right);
+        }
+        return expr;
+    }
+    private Expr and(){
+        Expr expr = equality();
+        while(match(UG)){
+            Token operator = previous();
+            Expr right = equality();
+            expr = new Expr.Logical(expr,operator,right);
+        }
+        return expr;
+    }
+    
     // BISAYA++
     private Stmt ipakitaStatement(){
         Expr expr = expression();
@@ -311,6 +381,9 @@ public class Parser {
 
                 // BISAYA++
                 case MUGNA:
+                // case MINTRAS:
+                // case KUNG:
+                // case PUNDOK:
 
                     return;
             }

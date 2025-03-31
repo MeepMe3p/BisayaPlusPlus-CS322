@@ -53,7 +53,11 @@ public class Scanner {
             case '-':
                 if(match('-')){
                     // for comments 
-                    while(peek() != '\n' && isAtEnd()) advance();
+
+                    while(peek() != '\n' && !isAtEnd()){
+                        advance();
+                    } 
+                    
                 } else{
                     addToken(MINUS);
                 }
@@ -309,26 +313,24 @@ public class Scanner {
 
 
         // FROM BISAYA++
-        keywords.put("SUGOD",  SUGOD);
-        keywords.put("MUGNA",  MUGNA);
-        keywords.put("IPAKITA",  IPAKITA);
-        keywords.put("KATAPUSAN",  KATAPUSAN);
+        keywords.put("SUGOD",  SUGOD); // done
+        keywords.put("MUGNA",  MUGNA); // done
+        keywords.put("IPAKITA",  IPAKITA); // done
+        keywords.put("KATAPUSAN",  KATAPUSAN); //done
         keywords.put("DAWAT",  DAWAT);
-        keywords.put("KUNG",  KUNG);
+        keywords.put("KUNG",  KUNG); //done
         // keywords.put("DILI",  KUNGDILI);
-        keywords.put("WALA", KUNGWALA);
-        keywords.put("PUNDOK",  PUNDOK);
+        keywords.put("WALA", KUNGWALA); //done
+        keywords.put("PUNDOK",  PUNDOK); //done
         keywords.put("ALANGSA",  ALANGSA);
-        keywords.put("NUMERO",  NUMERO);
-        keywords.put("LETRA",  LETRA);
-        keywords.put("TINUOD",  TINUOD);
-        keywords.put("UG",  UG);
+        keywords.put("MINTRAS",  MINTRAS);
+        keywords.put("NUMERO",  NUMERO); // done
+        keywords.put("LETRA",  LETRA); // TODO
+        keywords.put("TINUOD",  TINUOD); // done
+        keywords.put("UG",  UG); 
         keywords.put("O",  O);
         keywords.put("DILI",  DILI);
-        keywords.put("TIPIK",  TIPIK);
-    //     SUGOD, MUGNA,  IPAKITA, KATAPUSAN, DAWAT,KUNG, KUNGKUNG,KUNGWALA,PUNDOK,ALANGSA,
-    // NUMERO, LETRA,TIPIK, TINUOD,
-    // UG, O, DILI,
+        keywords.put("TIPIK",  TIPIK); // done
 
     }
 

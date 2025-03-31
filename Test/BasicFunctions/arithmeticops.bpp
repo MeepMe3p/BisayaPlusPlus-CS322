@@ -1,0 +1,7 @@
+SUGOD
+    MUGNA NUMERO xyz, abc=100
+    xyz = ((abc*5)/10 +10) 
+    --xyz= ((abc *5)/10 + 10) * TODO -1 FIX MAGKAERROR SA -1 DAPIT ADTOS NEGATION PART
+    -- IPAKITA: [[] & xyz & []]
+    IPAKITA: '[' & xyz & ']'
+KATAPUSAN

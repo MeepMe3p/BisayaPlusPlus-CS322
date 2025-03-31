@@ -1,0 +1,12 @@
+SUGOD
+
+MUGNA NUMERO a = 0
+MUGNA NUMERO temp
+
+ALANGSA (var b = 1, a < 10000, b = temp + b) {
+  print a;
+  temp = a;
+  a = b;
+}
+KATAPUSAN
+KATAPUSAN

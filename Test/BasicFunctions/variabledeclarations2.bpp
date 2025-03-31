@@ -1,0 +1,11 @@
+SUGOD
+    MUGNA NUMERO x, y, z=5
+    MUGNA LETRA a_1='n'
+    MUGNA TINUOD t= true
+    x=y=4
+    a_1='c'
+    -- this is a comment
+    -- IPAKITA: x & t & z & $ & a_1 & [#] & “last” di pani muwork havent implemented ($, [])
+  
+    IPAKITA: x & t & z & a_1 & "last"
+KATAPUSAN

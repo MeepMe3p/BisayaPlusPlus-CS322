@@ -11,6 +11,7 @@ abstract class Stmt {
     R visitPrintStmt(Print stmt);
     R visitVarStmt(Var stmt);
     R visitIfStmt(If stmt);
+    R visitWhileStmt(While stmt);
     R visitIpakitaStmt(Ipakita stmt);
     R visitMugnaStmt(Mugna stmt);
     R visitKungStmt(Kung stmt);
@@ -81,6 +82,20 @@ abstract class Stmt {
     final Expr condition;
     final Stmt thenBranch;
     final Stmt elseBranch;
+  }
+  static class While extends Stmt {
+    While(Expr condition, Stmt body) {
+      this.condition = condition;
+      this.body = body;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+    return visitor.visitWhileStmt(this);
+    }
+
+    final Expr condition;
+    final Stmt body;
   }
   static class Ipakita extends Stmt {
     Ipakita(Expr expression) {

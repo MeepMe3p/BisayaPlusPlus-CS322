@@ -1,0 +1,9 @@
+SUGOD
+    -- MUGNA NUMERO a=100, b=200, c=300 TODO: edit AST to accept this kind of way too
+    MUGNA NUMERO a = 100
+    MUGNA NUMERO b = 200
+    MUGNA NUMERO c = 300
+    MUGNA TINUOD d=false
+    d = (a < b UG c <>200)
+    IPAKITA: d
+KATAPUSAN

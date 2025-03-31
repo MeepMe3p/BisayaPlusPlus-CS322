@@ -1,6 +1,7 @@
 package BisayaPP;
 
 import BisayaPP.Expr.Assign;
+import BisayaPP.Expr.Logical;
 import BisayaPP.Expr.Variable;
 import BisayaPP.Stmt.Block;
 import BisayaPP.Stmt.Expression;
@@ -11,6 +12,7 @@ import BisayaPP.Stmt.Mugna;
 import BisayaPP.Stmt.Print;
 import BisayaPP.Stmt.Sugod;
 import BisayaPP.Stmt.Var;
+import BisayaPP.Stmt.While;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
@@ -271,8 +273,27 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitSugodStmt(Sugod stmt) {
-        System.out.println("tung tung tung sahur");
+        // System.out.println("tung tung tung sahur");
         executeBlock(stmt.statements, environment);
+        return null;
+    }
+
+    @Override
+    public Object visitLogicalExpr(Logical expr) {
+        Object left = evaluate(expr.left);
+        if(expr.operator.type == TokenType.OR){
+            if(isTruthy(left)) return left;
+        }else{
+            if(!isTruthy(left)) return left;
+        }
+        return evaluate(expr.right);
+    }
+
+    @Override
+    public Void visitWhileStmt(While stmt) {
+        while(isTruthy(evaluate(stmt.condition))){
+            execute(stmt.body);
+        }
         return null;
     }
 

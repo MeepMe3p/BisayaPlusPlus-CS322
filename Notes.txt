@@ -80,6 +80,7 @@ statement      → exprStmt
                | printStmt ;
                | block ;
                | ifStmt
+               | whileStmt
 
 exprStmt       → expression ";" ;
 printStmt      → "print" expression ";" ;
@@ -87,6 +88,7 @@ block          → "{" declaration* "}"
 
 ifStmt         → "if" "(" expression ")" "PUNDOK" statement
                ( "else" statement )? ;
+whileStmt      → "while" "(" expression ")" statement ;
 
 ASSIGNMENT
 expression     → assignment ;
@@ -107,3 +109,6 @@ TODO:
 - OO is true
 - DILI is false
 - [] <-- used for characters instead of ''
+- FIX while - variable can be printed but cannot be reassigned weird
+- FIX FOR
+- 

@@ -15,9 +15,16 @@ public class Parser {
     }
     List<Stmt> parse(){
         List<Stmt> statements = new ArrayList<>();
-        consume(SUGOD, "Kailangan");
-        while(!isAtEnd()){
-            statements.add(declaration());
+        if(!peek().lexeme.equals("SUGOD")){
+            throw error(peek(),"Kailangan sugod sugod");
+        } 
+
+        statements.add(sugodStatement());
+        // while(!isAtEnd()){
+        //     statements.add(declaration());
+        // }
+        if(!isAtEnd()){
+            throw error(peek(),"kailagna way human katapusan");
         }
         return statements;
 
@@ -56,8 +63,6 @@ public class Parser {
         // BISAYA++
         if(match(IPAKITA)) return ipakitaStatement();
         if(match(KUNG)) return kungStatement();
-        if(match(SUGOD)) return sugodStatement();
-        if(match(KATAPUSAN));
 
 
         return expressionStatement();
@@ -94,9 +99,13 @@ public class Parser {
         return new Stmt.If(condition, thenBranch, elseBranch);
     }
     private Stmt sugodStatement(){
-        Stmt statement = statement();
-        consume(KATAPUSAN, "Kailangan naay KATAPUSAN sa kinalasan");
-        return new Stmt.Sugod(statement);
+        consume(SUGOD, "Dapat magsugod ang program gamit ang 'SUGOD'");
+        List<Stmt> statements = new ArrayList<>();
+        while(!peek().lexeme.equals("KATAPUSAN") && !isAtEnd()){
+            statements.add(declaration());
+        }
+        consume(KATAPUSAN, "Kailangan naay 'KATAPUSAN' sa katapusan sa program");
+        return new Stmt.Sugod(statements);
     }
     
     private Stmt printStatement(){

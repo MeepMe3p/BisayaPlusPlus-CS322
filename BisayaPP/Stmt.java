@@ -127,8 +127,8 @@ abstract class Stmt {
     final Stmt elseBranch;
   }
   static class Sugod extends Stmt {
-    Sugod(Stmt statement) {
-      this.statement = statement;
+    Sugod(List<Stmt> statements) {
+      this.statements = statements;
     }
 
     @Override
@@ -136,7 +136,7 @@ abstract class Stmt {
     return visitor.visitSugodStmt(this);
     }
 
-    final Stmt statement;
+    final List<Stmt> statements;
   }
 
     abstract <R> R accept(Visitor<R> visitor);

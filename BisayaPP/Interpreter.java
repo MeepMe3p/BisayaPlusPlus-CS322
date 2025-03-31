@@ -271,7 +271,8 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitSugodStmt(Sugod stmt) {
-        execute(stmt.statement);
+        System.out.println("tung tung tung sahur");
+        executeBlock(stmt.statements, environment);
         return null;
     }
 

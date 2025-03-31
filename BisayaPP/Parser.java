@@ -15,6 +15,7 @@ public class Parser {
     }
     List<Stmt> parse(){
         List<Stmt> statements = new ArrayList<>();
+        consume(SUGOD, "Kailangan");
         while(!isAtEnd()){
             statements.add(declaration());
         }
@@ -29,6 +30,7 @@ public class Parser {
             if(match(VAR)) return varDeclaration();
             // TODO: MUGNA
             if(match(MUGNA)) return mugnaDeclaration();
+            
             return statement();
         } catch (ParseError e) {
             synchronize();
@@ -47,11 +49,16 @@ public class Parser {
     }
     private Stmt statement(){
         if(match(IF)) return ifStatement();
+        
         if(match(PRINT)) return printStatement();
         if(match(LEFT_BRACE)) return new Stmt.Block(block());
 
         // BISAYA++
         if(match(IPAKITA)) return ipakitaStatement();
+        if(match(KUNG)) return kungStatement();
+        if(match(SUGOD)) return sugodStatement();
+        if(match(KATAPUSAN));
+
 
         return expressionStatement();
     }
@@ -67,6 +74,31 @@ public class Parser {
         }
         return new Stmt.If(condition, thenBranch, elseBranch);
     }
+    private Stmt kungStatement() {
+        consume(LEFT_PAREN, "Kailangan adunay '(' inig human sa 'KUNG'");
+        Expr condition = expression();
+        consume(RIGHT_PARENT, "Kailangan isira gamit ang ')' inig human sa expresyon");
+        consume(PUNDOK, "Kailangan naay 'PUNDOK' inig human sa KUNG");
+    
+        Stmt thenBranch = statement();
+        Stmt elseBranch = null;
+
+        if (match(KUNGDILI)) {
+            elseBranch = kungStatement();  
+        } 
+        else if (match(KUNGWALA)) {
+            consume(PUNDOK, "Kailangan naay 'PUNDOK' inig human sa KUNG WALA");
+            elseBranch = statement();
+        }
+    
+        return new Stmt.If(condition, thenBranch, elseBranch);
+    }
+    private Stmt sugodStatement(){
+        Stmt statement = statement();
+        consume(KATAPUSAN, "Kailangan naay KATAPUSAN sa kinalasan");
+        return new Stmt.Sugod(statement);
+    }
+    
     private Stmt printStatement(){
         Expr value = expression();
         consume(SEMICOLON,"Expect ';' after value");

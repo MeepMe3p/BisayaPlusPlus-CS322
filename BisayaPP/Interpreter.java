@@ -6,8 +6,10 @@ import BisayaPP.Stmt.Block;
 import BisayaPP.Stmt.Expression;
 import BisayaPP.Stmt.If;
 import BisayaPP.Stmt.Ipakita;
+import BisayaPP.Stmt.Kung;
 import BisayaPP.Stmt.Mugna;
 import BisayaPP.Stmt.Print;
+import BisayaPP.Stmt.Sugod;
 import BisayaPP.Stmt.Var;
 import java.util.List;
 
@@ -254,6 +256,22 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         }else if(stmt.elseBranch != null){
             execute(stmt.elseBranch);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitKungStmt(Kung stmt) {
+        if(isTruthy(evaluate(stmt.condition))){
+            execute(stmt.thenBranch);
+        }else if(stmt.elseBranch != null){
+            execute(stmt.elseBranch);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitSugodStmt(Sugod stmt) {
+        execute(stmt.statement);
         return null;
     }
 

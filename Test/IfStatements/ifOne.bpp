@@ -1,0 +1,22 @@
+SUGOD
+MUGNA NUMERO x = 2
+KUNG (x < 10)
+PUNDOK{
+    IPAKITA: "mas gamay sa 10"
+    KUNG(true)PUNDOK{
+        IPAKITA:"YAY TRUE"
+    }
+} KUNG DILI(x<9)
+PUNDOK{
+    IPAKITA: "MAS DAKO SA 10"
+}
+KUNG DILI(x < 10)
+PUNDOK{
+    IPAKITA: "PUGOS"
+}
+KUNG WALA
+PUNDOK{
+    IPAKITA: "PAREHAS 10"
+
+}
+KATAPUSAN

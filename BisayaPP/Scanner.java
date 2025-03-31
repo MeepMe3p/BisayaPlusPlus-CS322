@@ -131,8 +131,23 @@ public class Scanner {
         while(isAlphaNumeric(peek()))
             advance();
         String text = source.substring(start,current);
+
+        if(text.equals("KUNG") && match(' ')){
+            String nextWord = readNextWord();
+            if(nextWord.equals("DILI")){
+                addToken(KUNGDILI);
+                return;
+            }else if(nextWord.equals("WALA")){
+                addToken(KUNGWALA);
+                return;
+            }
+            else{
+                current -= nextWord.length();
+            }
+        }
         TokenType type = keywords.get(text);
         // System.out.println(text);
+        
         if(type == null) {
             type = IDENTIFIER;
         }
@@ -142,6 +157,15 @@ public class Scanner {
         
         addToken(type);
         
+    }
+    private String readNextWord(){
+        while (peek() == ' ') advance();  
+
+        int wordStart = current; 
+    
+        while (isAlphaNumeric(peek())) advance(); 
+    
+        return source.substring(wordStart, current);
     }
     // [11]
     private void string(){
@@ -291,8 +315,8 @@ public class Scanner {
         keywords.put("KATAPUSAN",  KATAPUSAN);
         keywords.put("DAWAT",  DAWAT);
         keywords.put("KUNG",  KUNG);
-        keywords.put("KUNGKUNG",  KUNGKUNG);
-        keywords.put("KUNGWALA", KUNGWALA);
+        // keywords.put("DILI",  KUNGDILI);
+        keywords.put("WALA", KUNGWALA);
         keywords.put("PUNDOK",  PUNDOK);
         keywords.put("ALANGSA",  ALANGSA);
         keywords.put("NUMERO",  NUMERO);

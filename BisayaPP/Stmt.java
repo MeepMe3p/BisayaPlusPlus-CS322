@@ -13,6 +13,8 @@ abstract class Stmt {
     R visitIfStmt(If stmt);
     R visitIpakitaStmt(Ipakita stmt);
     R visitMugnaStmt(Mugna stmt);
+    R visitKungStmt(Kung stmt);
+    R visitSugodStmt(Sugod stmt);
     }
   static class Block extends Stmt {
     Block(List<Stmt> statements) {
@@ -107,6 +109,34 @@ abstract class Stmt {
     final Token type;
     final List<Token> names;
     final Expr initializer;
+  }
+  static class Kung extends Stmt {
+    Kung(Expr condition, Stmt thenBranch, Stmt elseBranch) {
+      this.condition = condition;
+      this.thenBranch = thenBranch;
+      this.elseBranch = elseBranch;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+    return visitor.visitKungStmt(this);
+    }
+
+    final Expr condition;
+    final Stmt thenBranch;
+    final Stmt elseBranch;
+  }
+  static class Sugod extends Stmt {
+    Sugod(Stmt statement) {
+      this.statement = statement;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+    return visitor.visitSugodStmt(this);
+    }
+
+    final Stmt statement;
   }
 
     abstract <R> R accept(Visitor<R> visitor);

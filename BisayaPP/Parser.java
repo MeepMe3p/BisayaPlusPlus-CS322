@@ -46,12 +46,26 @@ public class Parser {
         return new Stmt.Var(name, initializer);
     }
     private Stmt statement(){
+        if(match(IF)) return ifStatement();
         if(match(PRINT)) return printStatement();
+        if(match(LEFT_BRACE)) return new Stmt.Block(block());
 
         // BISAYA++
         if(match(IPAKITA)) return ipakitaStatement();
 
         return expressionStatement();
+    }
+    private Stmt ifStatement(){
+        consume(LEFT_PAREN, "Expect '(' after 'if'.");
+        Expr condition = expression();
+        consume(RIGHT_PARENT, "Expect ')' after if condition.");
+
+        Stmt thenBranch = statement();
+        Stmt elseBranch = null;
+        if(match(ELSE)){
+            elseBranch = statement();
+        }
+        return new Stmt.If(condition, thenBranch, elseBranch);
     }
     private Stmt printStatement(){
         Expr value = expression();
@@ -62,6 +76,15 @@ public class Parser {
         Expr expr = expression();
         // consume(SEMICOLON, "Expect ';' after value");
         return new Stmt.Expression(expr);
+    }
+    private List<Stmt> block(){
+        List<Stmt> statements = new ArrayList<>();
+        // TODO: USEFUL ATA FOR SUGOD AND KATAPUSAN
+        while(!check(RIGHT_BRACE) && !isAtEnd()){ 
+            statements.add(declaration());
+        }
+        consume(RIGHT_BRACE,"Dapat naay '}' ubug human sa code");
+        return statements;
     }
     private Expr assignment() {
         Expr expr = equality();

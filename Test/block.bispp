@@ -1,0 +1,21 @@
+MUGNA NUMERO x = 1
+MUGNA NUMERO y = 2
+MUGNA NUMERO z = 3
+
+{
+  MUGNA NUMERO x = 10
+  MUGNA NUMERO y = 20
+  {
+    MUGNA NUMERO x = 100
+    IPAKITA: "Inner: " & x
+    IPAKITA: "Inner: " & y
+    IPAKITA: "Inner: " & z
+  }
+ IPAKITA: "Outer: " & x
+ IPAKITA: "Outer: " & y
+ IPAKITA: "Outer: " & z
+ 
+}
+IPAKITA: "Global: " & x
+IPAKITA: "Global: " & y
+IPAKITA: "Global: " & z

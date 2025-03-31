@@ -2,7 +2,9 @@ package BisayaPP;
 
 import BisayaPP.Expr.Assign;
 import BisayaPP.Expr.Variable;
+import BisayaPP.Stmt.Block;
 import BisayaPP.Stmt.Expression;
+import BisayaPP.Stmt.If;
 import BisayaPP.Stmt.Ipakita;
 import BisayaPP.Stmt.Mugna;
 import BisayaPP.Stmt.Print;
@@ -131,6 +133,17 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     private void execute(Stmt stmt){
         stmt.accept(this);
     }
+    void executeBlock(List<Stmt> statements, Environment environment){
+        Environment previous = this.environment;
+        try {
+            this.environment = environment;
+            for(Stmt statement: statements){
+                execute(statement);
+            }
+        } finally {
+            this.environment = previous;
+        }
+    }
     
 
     @Override
@@ -227,5 +240,24 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         environment.assign(expr.name, expr.type.lexeme, value);
         return value;
     }
+
+    @Override
+    public Void visitBlockStmt(Block stmt) {
+        executeBlock(stmt.statements,new Environment(environment));
+        return null;
+    }
+
+    @Override
+    public Void visitIfStmt(If stmt) {
+        if(isTruthy(evaluate(stmt.condition))){
+            execute(stmt.thenBranch);
+        }else if(stmt.elseBranch != null){
+            execute(stmt.elseBranch);
+        }
+        return null;
+    }
+
+
+
 
 }

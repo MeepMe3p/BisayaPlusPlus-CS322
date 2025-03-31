@@ -26,13 +26,17 @@ public class GenerateAST {
         ));
 
         defineAST(outputDir,"Stmt",Arrays.asList(
+            "Block      : List<Stmt> statements",
             "Expression : Expr expression"
             ,"Print      : Expr expression"
             ,"Var        : Token name, Expr initializer"
+            ,"If         : Expr condition, Stmt thenBranch," +
+            " Stmt elseBranch"
 
             // BISAYA++
             ,"Ipakita    : Expr expression"
-            ,"Mugna        : Token type, List<Token> names, Expr initializer"
+            ,"Mugna      : Token type, List<Token> names, Expr initializer"
+            // ,"Kung       : "
             
         ));
     }

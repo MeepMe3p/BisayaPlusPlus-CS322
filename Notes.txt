@@ -30,6 +30,7 @@
 
 // ENVIRONMENT
 [19] A map for the variables declared
+[23] Used for global and local variables, { code inside braces }, 
 
 
 
@@ -77,9 +78,15 @@ program        → statement* EOF ;
 
 statement      → exprStmt
                | printStmt ;
+               | block ;
+               | ifStmt
 
 exprStmt       → expression ";" ;
 printStmt      → "print" expression ";" ;
+block          → "{" declaration* "}"
+
+ifStmt         → "if" "(" expression ")" "PUNDOK" statement
+               ( "else" statement )? ;
 
 ASSIGNMENT
 expression     → assignment ;
@@ -95,7 +102,7 @@ java BisayaPP.BisayaPlusPlus   # RUUUN
 TODO:
 - IMPLEMENT '&' CONCAT ===== DONE
 - STATIC TTYPES        ===== DONE
-- FIX REDUNDANT SA PARSER (PRIORITY)
+- FIX REDUNDANT SA PARSER (PRIORITY) ==== DONE
 - $ (new line)
 - OO is true
 - DILI is false

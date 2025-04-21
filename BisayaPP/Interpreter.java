@@ -14,6 +14,7 @@ import BisayaPP.Stmt.Print;
 import BisayaPP.Stmt.Sugod;
 import BisayaPP.Stmt.Var;
 import BisayaPP.Stmt.While;
+import static BisayaPP.TokenType.EQUAL_EQUAL;
 import java.util.List;
 import java.util.Scanner;
 
@@ -38,14 +39,19 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
         if (expr.operator.type == TokenType.PLUS) {
             if (left instanceof String || right instanceof String) {
-                return left.toString() + right.toString();
+                // return left.toString() + right.toString();
+                return stringify(left) + stringify(right);
             }
+        }
+        if(left instanceof String && right instanceof String && expr.operator.type.equals(EQUAL_EQUAL)){
+            // System.out.println("hereeeeeeeeeee");
+            return isEqual(left, right);
         }
 
         if(left instanceof Number && right instanceof Number){
             Number numLeft = toNumber(left);
             Number numRight = toNumber(right);
-
+            // System.out.println("Type is"+ expr.operator.type);
             switch(expr.operator.type){
                 case GREATER: return numLeft.doubleValue() > numRight.doubleValue();
                 case GREATER_EQUAL: return numLeft.doubleValue() >= numRight.doubleValue();
@@ -53,6 +59,9 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
                 case LESS_EQUAL: return numLeft.doubleValue() <= numRight.doubleValue();
                 case BANG_EQUAL: 
                 case NOT_EQUAL: return !numLeft.equals(numRight);
+                case EQUAL_EQUAL:
+                    System.out.println("hereee");
+                 return isEqual(left, right);
                 case EQUAL: return numLeft.equals(numRight);
                 case MINUS: return performOperation(numLeft, numRight, '-');
                 case PLUS: return performOperation(numLeft, numRight, '+');
@@ -64,6 +73,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
                 case STAR: return performOperation(numLeft, numRight, '*');
             }
         }
+        
         if(expr.operator.type == TokenType.CONCAT){
             // return left.toString() + right.toString();
             return stringify(left) + stringify(right);
@@ -135,8 +145,14 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         return true;
     }
     private boolean isEqual(Object a, Object b){
+        // System.out.println("paskoooo");
         if(a == null && b == null) return false;
         if(a == null) return false;
+        if (a instanceof String && b instanceof String) {
+            // System.out.println(a+"reehee"+b);
+
+            return ((String) a).equals((String) b);
+        }
         return a.equals(b);
     }
     private Object evaluate (Expr expr){

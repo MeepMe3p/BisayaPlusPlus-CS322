@@ -268,10 +268,12 @@ public class Parser {
     private Expr equality(){
         Expr expr = comparison();
 
-        while (match(BANG_EQUAL, EQUAL_EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
-            // System.out.println("dapat di ka musud diri cuz = rmaan sha");
+        // while (match(BANG_EQUAL, EQUAL_EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
+            while (match( EQUAL_EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
+            System.out.println("dapat  ka musud diri cuz == rmaan sha");
             Token operator = previous();
             Expr right = comparison();
+            
             expr = new Expr.Binary(expr, operator, right);
         }
 

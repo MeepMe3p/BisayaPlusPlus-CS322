@@ -99,16 +99,20 @@ javac -d . BisayaPP/*.java  Tool/*.java  # ComPILE
 java Tool.GenerateAST # RUUUN
 java BisayaPP.BisayaPlusPlus   # RUUUN
 
+java Tool.GenerateAST BisayaPP
+java BisayaPP.BisayaPlusPlus Test/BasicFunctions/logicalops.bpp
+
+
 
 
 TODO:
 - IMPLEMENT '&' CONCAT ===== DONE
 - STATIC TTYPES        ===== DONE
 - FIX REDUNDANT SA PARSER (PRIORITY) ==== DONE
-- $ (new line)
-- OO is true
-- DILI is false
-- [] <-- used for characters instead of ''
+- $ (new line) ==== DONE
+- OO is true === DONE
+- DILI is false ==== DONE
+- [] <-- used for characters instead of '' === DONE
 - FIX while - variable can be printed but cannot be reassigned weird
 - FIX FOR
 - 

@@ -183,8 +183,16 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             value = evaluate(stmt.initializer);
         }
         for(Token name: stmt.names){
+            if(value.equals("OO")){
+                environment.define(name, dataType.lexeme , true);
+            }else if (value.equals("DILI")) {
+                environment.define(name, dataType.lexeme , false);
+                
+            }else{
+
+                environment.define(name, dataType.lexeme , value);
+            }
             // System.out.println("Type: "+ dataType.lexeme+ " "+ name.lexeme + " = " +value);
-            environment.define(name, dataType.lexeme , value);
         }
         // System.out.println("Initi:"+value);
 
@@ -207,6 +215,12 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             }
             return text;
         }
+        if(object instanceof Boolean){
+            return (boolean) object ? "OO" : "DILI";
+        }
+        if(object instanceof String){
+            return ((String) object).replace("$", "\n");
+        }
         return object.toString();
     }
 
@@ -217,6 +231,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         if(stmt.initializer != null){
             value = evaluate(stmt.initializer);
         }
+        // System.out.println("Statement is" + stmt.name.lexeme+" ----" + value);
         environment.define(stmt.name.lexeme, value);
         return null;
     }

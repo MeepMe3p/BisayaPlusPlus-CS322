@@ -119,6 +119,12 @@ public class Scanner {
                 character();
                 // System.out.println("character went here");
                 break;
+            case '[':
+                letra();
+                break;
+            case '$':
+                addToken(STRING,"\n");
+                break;
         default:
                 if(isDigit(c)){
                     number();
@@ -186,35 +192,26 @@ public class Scanner {
         addToken(STRING,value);
     }
     private void character() {
-        
-        // System.out.println(peek()+"this is peak");
-
-        char value = source.charAt(start+1);
-        // System.out.println(current - start+" This is start - current");
-        // if (current - start != 2) {  
-        //     System.out.println(current + " - " + start +" != " + (current - start));
-        //     BisayaPlusPlus.error(line, "Character literals must have exactly one character.");
-        //     return;
-        // }
-
-        advance();
-        // System.out.println(peek()+"1");
-        // System.out.println(peekNext()+"2");
+        if(isAtEnd()){
+            BisayaPlusPlus.error(line, "Walay sulod ang LETRA");
+        }
+        char value = advance();
         if(peek() != '\''){
-            if(isAtEnd()){
-                BisayaPlusPlus.error(line,"Unterminated character,");
-                return;
-            }
-            while(!isAtEnd()){
-                // System.out.println("Peak: "+peek());
-                advance();
-            }
-            BisayaPlusPlus.error(line, "Character literals must have exactly one character");
-            return;
-        } 
-        // System.out.println("value: "+value);
+            BisayaPlusPlus.error(line, "Kailangan isira gamit ang ']'");
+        }
         advance();
-        addToken(CHAR, value);
+        addToken(CHAR,value);
+    }
+    private void letra(){
+        if(isAtEnd()){
+            BisayaPlusPlus.error(line, "Walay sulod ang LETRA");
+        }
+        char value = advance();
+        if(peek() != ']'){
+            BisayaPlusPlus.error(line, "Kailangan isira gamit ang ']'");
+        }
+        advance();
+        addToken(CHAR,value);
     }
     
     
@@ -330,6 +327,9 @@ public class Scanner {
         keywords.put("UG",  UG); 
         keywords.put("O",  O);
         keywords.put("DILI",  DILI);
+
+        // keywords.put("\"OO\"",TRUE);
+        // keywords.put("\"DILI\"",FALSE);
         keywords.put("TIPIK",  TIPIK); // done
 
     }

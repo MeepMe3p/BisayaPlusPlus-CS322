@@ -164,6 +164,10 @@ public class Scanner {
         if(type == IPAKITA && !match(':')){
             BisayaPlusPlus.error(line,"Expected ':' after IPAKITA");
         }
+        if(type == DAWAT && !match(':')){
+            BisayaPlusPlus.error(line,"Expected ':' after DAWAT");
+
+        }
         
         addToken(type);
         
@@ -314,7 +318,7 @@ public class Scanner {
         keywords.put("MUGNA",  MUGNA); // done
         keywords.put("IPAKITA",  IPAKITA); // done
         keywords.put("KATAPUSAN",  KATAPUSAN); //done
-        keywords.put("DAWAT",  DAWAT);
+        keywords.put("DAWAT",  DAWAT); // done
         keywords.put("KUNG",  KUNG); //done
         // keywords.put("DILI",  KUNGDILI);
         keywords.put("WALA", KUNGWALA); //done
@@ -324,9 +328,9 @@ public class Scanner {
         keywords.put("NUMERO",  NUMERO); // done
         keywords.put("LETRA",  LETRA); // TODO
         keywords.put("TINUOD",  TINUOD); // done
-        keywords.put("UG",  UG); 
-        keywords.put("O",  O);
-        keywords.put("DILI",  DILI);
+        keywords.put("UG",  UG); // done
+        keywords.put("O",  O); // done
+        keywords.put("DILI",  DILI);  //done
 
         // keywords.put("\"OO\"",TRUE);
         // keywords.put("\"DILI\"",FALSE);

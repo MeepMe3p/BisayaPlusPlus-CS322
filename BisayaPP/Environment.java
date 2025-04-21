@@ -26,9 +26,10 @@ class Environment {
         throw new RuntimeError(name, "Undefined variable '"+ name.lexeme+"''.");
     }
 
-    void define (String name, Object value){
-        values.put(name,value);
-    }
+    // void define (String name, Object value){
+    //     // System.out.println("it went here name: "+ name + " value: "+value);
+    //     values.put(name,value);
+    // }
     void assign(Token name, Object value){
         if(values.containsKey(name.lexeme)){
             values.put(name.lexeme,value);
@@ -41,11 +42,18 @@ class Environment {
         throw new RuntimeError(name, "Undefined variable '"+ name.lexeme+"'.");
     }
     void assign(Token name, String dataType, Object value){
+        // System.out.println(dataType+ "dt"+ value);
         if(typeCheck(dataType, value)){
+            // System.out.println("went herrr");
             if(values.containsKey(name.lexeme)){
+                // System.out.println("went herr again");
                 values.put(name.lexeme, value);
                 return;
             }
+        }
+        if(enclosing != null){
+            enclosing.assign(name,dataType, value);
+            return;
         }
         throw new RuntimeError(name, "Variable '"+ name.lexeme+" not declared. ");
     }
@@ -60,6 +68,8 @@ class Environment {
     }
 
     private boolean typeCheck(String dataType, Object value){
+        // System.out.println("wa naka nisulod diti noh");
+
         switch(dataType){
             case "NUMERO": return value instanceof Integer;
             case "TIPIK": return value instanceof Double;

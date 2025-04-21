@@ -75,11 +75,13 @@ public class Parser {
         // BISAYA++
         if(match(IPAKITA)) return ipakitaStatement();
         if(match(KUNG)) return kungStatement();
+        if(match(DAWAT)) return dawatStatement();
 
 
 
         return expressionStatement();
     }
+    
     private Stmt forStatement(){
         consume(LEFT_PAREN, "Expect '(' after for");
         Stmt initializer;
@@ -129,6 +131,7 @@ public class Parser {
         }
         return new Stmt.If(condition, thenBranch, elseBranch);
     }
+
     private Stmt kungStatement() {
         consume(LEFT_PAREN, "Kailangan adunay '(' inig human sa 'KUNG'");
         Expr condition = expression();
@@ -218,8 +221,17 @@ public class Parser {
         Expr expr = expression();
         return new Stmt.Ipakita(expr);
     }
+    private Stmt dawatStatement(){
+        List <Token> variableNames = new ArrayList<>();
+        do { 
+            variableNames.add(consume(IDENTIFIER, "Kailangan ngalan sa variable"));
+            // System.out.println(variableNames);
+        } while (match(COMMA));
+        return new Stmt.Dawat(variableNames);
+    }
     // [21]
     private Stmt mugnaDeclaration(){
+        // System.out.println("pasokkk herererera");
         Token type;
         if(match(NUMERO)){
             type = previous();
@@ -233,23 +245,20 @@ public class Parser {
             throw error(peek(), "After MUGNA Expect a data type.");
         }
         List<Token> names = new ArrayList<>();
+        List<Expr> initializers = new ArrayList<>();
+        do { 
+            Token name = consume(IDENTIFIER, "Dapat nay variable name");
+            names.add(name);
+            if(match(EQUAL)){
+                initializers.add(expression());
+            } else{
+                initializers.add(null);
+            }
 
-        names.add(consume(IDENTIFIER, "Expect variable name"));
-        while(match(COMMA)){
-            // System.out.println("went hereeee!!");
-            names.add(consume(IDENTIFIER, "Expect variable name"));
-        }
-        Expr initializer = null;
-        if(match(EQUAL)){
-            initializer = expression();
-        }
-        // System.out.println("nipasok here squared" + peek().type);
-        // consume(SEMICOLON, "Expect ';' after variable declarationzz");
+        } while (match(COMMA));
 
-        // System.out.println("After");
 
-        // System.out.println("The names"+names+" The type "+ type+" The initializer"+initializer);
-        return new Stmt.Mugna(type,names,initializer);
+        return new Stmt.Mugna(type,names,initializers);
     
     }
 

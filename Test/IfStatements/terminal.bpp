@@ -1,12 +1,5 @@
 SUGOD
-
---MUGNA NUMERO a = 0
---MUGNA TIPIK x = 0.5
---MUGNA TINUOD x = "DILI"
-MUGNA LETRA x = 'y'
-MUGNA NUMERO x,y,z=5
-MUGNA TINUOD t = "OO"
-x=y=4
-IPAKITA: "Hello" & $ & "world"
+MUGNA NUMERO i =0
+IPAKITA: i
 
 KATAPUSAN

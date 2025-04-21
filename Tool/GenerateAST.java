@@ -37,9 +37,10 @@ public class GenerateAST {
 
             // BISAYA++
             ,"Ipakita    : Expr expression"
-            ,"Mugna      : Token type, List<Token> names, Expr initializer"
+            ,"Mugna      : Token type, List<Token> names, List<Expr> initializers"
             ,"Kung       : Expr condition, Stmt thenBranch, Stmt elseBranch"
             ,"Sugod       : List<Stmt> statements"
+            ,"Dawat       : List<Token> names"
             
         ));
     }

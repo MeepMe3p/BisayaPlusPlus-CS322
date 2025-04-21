@@ -16,6 +16,7 @@ abstract class Stmt {
     R visitMugnaStmt(Mugna stmt);
     R visitKungStmt(Kung stmt);
     R visitSugodStmt(Sugod stmt);
+    R visitDawatStmt(Dawat stmt);
     }
   static class Block extends Stmt {
     Block(List<Stmt> statements) {
@@ -110,10 +111,10 @@ abstract class Stmt {
     final Expr expression;
   }
   static class Mugna extends Stmt {
-    Mugna(Token type, List<Token> names, Expr initializer) {
+    Mugna(Token type, List<Token> names, List<Expr> initializers) {
       this.type = type;
       this.names = names;
-      this.initializer = initializer;
+      this.initializers = initializers;
     }
 
     @Override
@@ -123,7 +124,7 @@ abstract class Stmt {
 
     final Token type;
     final List<Token> names;
-    final Expr initializer;
+    final List<Expr> initializers;
   }
   static class Kung extends Stmt {
     Kung(Expr condition, Stmt thenBranch, Stmt elseBranch) {
@@ -152,6 +153,18 @@ abstract class Stmt {
     }
 
     final List<Stmt> statements;
+  }
+  static class Dawat extends Stmt {
+    Dawat(List<Token> names) {
+      this.names = names;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+    return visitor.visitDawatStmt(this);
+    }
+
+    final List<Token> names;
   }
 
     abstract <R> R accept(Visitor<R> visitor);

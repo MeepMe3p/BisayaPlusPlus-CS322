@@ -243,6 +243,7 @@ public class Scanner {
         String numberLiteral = source.substring(start, current);
      
         if (isFloat) {
+            System.out.println("it floooaat");
             addToken(NUMBER, Double.parseDouble(numberLiteral));
         } else {
             addToken(NUMBER, Integer.parseInt(numberLiteral)); 

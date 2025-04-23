@@ -32,6 +32,7 @@ public class BisayaPlusPlus {
             } catch (IOException ex) {
             }
         }
+        System.out.println("No error");
     }
 
 // [2]

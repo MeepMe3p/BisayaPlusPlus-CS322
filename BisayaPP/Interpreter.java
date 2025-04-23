@@ -53,10 +53,12 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             Number numRight = toNumber(right);
             // System.out.println("Type is"+ expr.operator.type);
             switch(expr.operator.type){
-                case GREATER: return numLeft.doubleValue() > numRight.doubleValue();
-                case GREATER_EQUAL: return numLeft.doubleValue() >= numRight.doubleValue();
-                case LESS: return numLeft.doubleValue() < numRight.doubleValue();
-                case LESS_EQUAL: return numLeft.doubleValue() <= numRight.doubleValue();
+                // case GREATER: return true;
+                // case GREATER: return numLeft.doubleValue() > numRight.doubleValue();
+                case GREATER: return performComparison(numLeft, numRight, '>');
+                case GREATER_EQUAL: return performComparison(numLeft, numRight, 'g');
+                case LESS: return performComparison(numLeft, numRight, '<');
+                case LESS_EQUAL: return performComparison(numLeft, numRight, 'l');
                 case BANG_EQUAL: 
                 case NOT_EQUAL: return !numLeft.equals(numRight);
                 case EQUAL_EQUAL:
@@ -64,6 +66,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
                  return isEqual(left, right);
                 case EQUAL: return numLeft.equals(numRight);
                 case MINUS: return performOperation(numLeft, numRight, '-');
+                // case PLUS: return (int)numLeft + (int)numRight;
                 case PLUS: return performOperation(numLeft, numRight, '+');
                 case SLASH: 
                     if (numRight.doubleValue() == 0) {
@@ -71,6 +74,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
                     }
                     return numLeft.doubleValue() / numRight.doubleValue();
                 case STAR: return performOperation(numLeft, numRight, '*');
+                case MODULO: return performOperation(numLeft, numRight, '%');
             }
         }
         
@@ -85,13 +89,72 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         if (obj instanceof Double) return (Double) obj;
         throw new RuntimeError(null, "Operand must be a number.");
     }
+    private boolean performComparison(Number numLeft, Number numRight, char operation){
+        switch(operation){
+            case '<':
+                if (numLeft instanceof Double || numRight instanceof Double) {
+                    return numLeft.doubleValue() < numRight.doubleValue();
+                } else {
+                    return numLeft.intValue() < numRight.intValue();
+                }
+            case '>':
+                if (numLeft instanceof Double || numRight instanceof Double) {
+                    return numLeft.doubleValue() > numRight.doubleValue();
+                } else {
+                    return numLeft.intValue() > numRight.intValue();
+                }
+            case '=':
+                if (numLeft instanceof Double || numRight instanceof Double) {
+                    return numLeft.doubleValue() == numRight.doubleValue();
+                } else {
+                    return numLeft.intValue() == numRight.intValue();
+                }
+            case '!':
+                if (numLeft instanceof Double || numRight instanceof Double) {
+                    return numLeft.doubleValue() != numRight.doubleValue();
+                } else {
+                    return numLeft.intValue() != numRight.intValue();
+                }
+            case 'g':
+                if (numLeft instanceof Double || numRight instanceof Double) {
+                    return numLeft.doubleValue() >= numRight.doubleValue();
+                } else {
+                    return numLeft.intValue() >= numRight.intValue();
+                }
+            case 'l':
+                if (numLeft instanceof Double || numRight instanceof Double) {
+                    return numLeft.doubleValue() <= numRight.doubleValue();
+                } else {
+                    return numLeft.intValue() <= numRight.intValue();
+                }
+            default: throw new RuntimeError(null, "Unknown operator");
 
+            
+        }
+    }
     private Number performOperation(Number left, Number right, char operation){
         boolean isDouble = (left instanceof Double) || (right instanceof Double);
+        // System.out.println("ISdouble"+isDouble);
         switch(operation){
-            case '+': return isDouble ? left.doubleValue() + right.doubleValue() : left.intValue() + right.intValue();
-            case '-': return isDouble ? left.doubleValue() - right.doubleValue() : left.intValue() - right.intValue();
-            case '*': return isDouble ? left.doubleValue() * right.doubleValue() : left.intValue() * right.intValue();
+
+            case '+':
+                if(isDouble) return Double.valueOf(left.doubleValue() + right.doubleValue());
+                else return Integer.valueOf(left.intValue() + right.intValue());
+            case '-':
+                if(isDouble) return Double.valueOf(left.doubleValue() - right.doubleValue());
+                else return Integer.valueOf(left.intValue() - right.intValue());
+            case '*':
+                if(isDouble) return Double.valueOf(left.doubleValue() * right.doubleValue());
+                else return Integer.valueOf(left.intValue() * right.intValue());
+            case '/':
+                if(isDouble) return Double.valueOf(left.doubleValue() / right.doubleValue());
+                else return Integer.valueOf(left.intValue() / right.intValue());
+            case '%':
+                if(isDouble) return Double.valueOf(left.doubleValue() % right.doubleValue());
+                else return Integer.valueOf(left.intValue() % right.intValue());
+            // case '-': return isDouble ? left.doubleValue() - right.doubleValue() : left.intValue() - right.intValue();
+            // case '*': return isDouble ? left.doubleValue() * right.doubleValue() : left.intValue() * right.intValue();
+            // case '%': return isDouble ? left.doubleValue() % right.doubleValue() : left.intValue() % right.intValue();
             default: throw new RuntimeError(null, "Unknown operator");
         }
     }
@@ -197,7 +260,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
     }
     @Override
     public Void visitMugnaStmt(Mugna stmt) {
-        // System.out.println("oof");
+        // System.out.println("No error");
         for(int i =0; i < stmt.names.size();i++){
             Token name = stmt.names.get(i);
             Expr initializer = stmt.initializers.get(i);
@@ -207,6 +270,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             Object value;
             if(initializer!=null){
                 value = evaluate(initializer);
+                // System.out.println("value is"+ value);
                 // if (dataType.lexeme.equals("TINUOD")) {
                 //     if (value instanceof String) {
                 //         String strVal = (String) value;
@@ -255,9 +319,9 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
                     }
                 }
                 // System.out.println("foo");
-                environment.define(name, dataType.lexeme , value);
                 // environment.define(name.lexeme, value);
-
+                
+                environment.define(name, dataType.lexeme , value); 
             }
             // System.out.println("went here");
             // System.out.println("Type:"+stmt.type);

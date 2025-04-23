@@ -17,16 +17,22 @@ public class Parser {
     }
     List<Stmt> parse(){
         List<Stmt> statements = new ArrayList<>();
-        if(!peek().lexeme.equals("SUGOD")){
-            throw error(peek(),"Kailangan sugod sugod");
-        } 
-
-        statements.add(sugodStatement());
-        // while(!isAtEnd()){
-        //     statements.add(declaration());
-        // }
-        if(!isAtEnd()){
-            throw error(peek(),"kailagna way human katapusan");
+        try {
+            System.out.println("HEREEEEEEEEEEEEE");
+            if(!peek().lexeme.equals("SUGOD")){
+                throw error(peek(),"Kailangan sugod sugod");
+            } 
+    
+            statements.add(sugodStatement());
+            // while(!isAtEnd()){
+            //     statements.add(declaration());
+            // }
+            // if(!isAtEnd()){
+            //     throw error(peek(),"kailagna way human katapusan");
+            // }
+        } catch (ParseError e) {
+            System.err.println("No error");
+            
         }
         return statements;
 
@@ -47,7 +53,7 @@ public class Parser {
         }
     }
     private Stmt varDeclaration(){
-        Token name = consume(IDENTIFIER, "Expect variable name");
+        Token name = consume(IDENTIFIER, "Kailangan naay variable name");
 
         Expr initializer = null;
         if(match(EQUAL)){
@@ -154,9 +160,17 @@ public class Parser {
     private Stmt sugodStatement(){
         consume(SUGOD, "Dapat magsugod ang program gamit ang 'SUGOD'");
         List<Stmt> statements = new ArrayList<>();
-        while(!peek().lexeme.equals("KATAPUSAN") && !isAtEnd()){
-            statements.add(declaration());
+        try {
+            while(!peek().lexeme.equals("KATAPUSAN") && !isAtEnd()){
+                statements.add(declaration());
+            }
+        } catch (ParseError e) {
+            synchronize();
+            // System.err.println("No error");
         }
+        // while(!peek().lexeme.equals("KATAPUSAN") && !isAtEnd()){
+        //     statements.add(declaration());
+        // }
         consume(KATAPUSAN, "Kailangan naay 'KATAPUSAN' sa katapusan sa program");
         return new Stmt.Sugod(statements);
     }
@@ -270,7 +284,7 @@ public class Parser {
 
         // while (match(BANG_EQUAL, EQUAL_EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
             while (match( EQUAL_EQUAL, NOT_EQUAL)) { // TODO: REMOVE BANGEQUAL
-            System.out.println("dapat  ka musud diri cuz == rmaan sha");
+            // System.out.println("dapat  ka musud diri cuz == rmaan sha");
             Token operator = previous();
             Expr right = comparison();
             
@@ -300,7 +314,7 @@ public class Parser {
     }
     private Expr factor(){
         Expr expr = unary();
-        while(match(SLASH,STAR)){
+        while(match(SLASH,STAR,MODULO)){
             Token operator = previous();
             Expr right = unary();
             expr = new Expr.Binary(expr, operator, right);
@@ -392,6 +406,7 @@ public class Parser {
 
                 // BISAYA++
                 case MUGNA:
+                case KATAPUSAN:
                 // case MINTRAS:
                 // case KUNG:
                 // case PUNDOK:

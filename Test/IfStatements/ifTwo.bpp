@@ -3,7 +3,7 @@ SUGOD
   DAWAT: x
 
   KUNG(x < 18)
-  PUNDOK{
+  {
     IPAKITA: "di paka pwede musulod"
   } KUNG DILI (x > 18)
   PUNDOK{

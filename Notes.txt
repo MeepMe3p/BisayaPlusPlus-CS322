@@ -94,13 +94,6 @@ ASSIGNMENT
 expression     → assignment ;
 assignment     → IDENTIFIER "=" assignment
                | equality ;
-               
-javac -d . BisayaPP/*.java  Tool/*.java  # ComPILE
-java Tool.GenerateAST # RUUUN
-java BisayaPP.BisayaPlusPlus   # RUUUN
-
-java Tool.GenerateAST BisayaPP
-java BisayaPP.BisayaPlusPlus Test/BasicFunctions/logicalops.bpp
 
 
 
@@ -116,3 +109,22 @@ TODO:
 - FIX while - variable can be printed but cannot be reassigned weird
 - FIX FOR
 - 
+
+
+
+               
+javac -d . BisayaPP/*.java  Tool/*.java  # ComPILE
+java BisayaPP.BisayaPlusPlus   # RUUUN
+
+java Tool.GenerateAST BisayaPP
+java BisayaPP.BisayaPlusPlus Test/Test2/1.bpp
+
+SYNTAX:
+PRINT === IPAKITA: "HELLO WORLD"
+INPUT === DAWAT x (if isa ra then input one) DAWAT x,y (if twp or more input two or more separated by comma)
+IF    === KUNG(condition) PUNDOK{}
+ELSE IF == KUNG DILI (CONDITION) PUNDOK{}
+ELSE  === KUNG WALA PUNDOK{}
+WHILE === MINTRAS (CONDITION) PUNDOK{}
+FOR   === ALANG SA (initialize, condition,iteration) PUNDOK{}
+

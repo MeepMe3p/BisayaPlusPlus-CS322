@@ -14,6 +14,7 @@ abstract class Expr {
     R visitUnaryExpr(Unary expr);
     R visitVariableExpr(Variable expr);
     R visitAssignBisExpr(AssignBis expr);
+    R visitPostfixExpr(Postfix expr);
     }
   static class Assign extends Expr {
     Assign(Token name, Expr value) {
@@ -126,6 +127,20 @@ abstract class Expr {
     final Token type;
     final Token name;
     final Expr value;
+  }
+  static class Postfix extends Expr {
+    Postfix(Expr left, Token operator) {
+      this.left = left;
+      this.operator = operator;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+    return visitor.visitPostfixExpr(this);
+    }
+
+    final Expr left;
+    final Token operator;
   }
 
     abstract <R> R accept(Visitor<R> visitor);

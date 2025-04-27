@@ -42,7 +42,16 @@ public class Scanner {
             case '}':addToken(RIGHT_BRACE);break;
             case ',':addToken(COMMA);break;
             case '.':addToken(DOT);break;
-            case '+':addToken(PLUS);break;
+            // case '+':addToken(PLUS);break;
+            case '+':
+                if(match('+')){
+                    // System.out.println("went here");
+                    addToken(PLUSPLUS);
+                }else{
+
+                    addToken(PLUS);
+                }
+                break;
             // case '-':addToken(BisayaPP.TokenType.MINUS);break;
             case ';':addToken(SEMICOLON);break;
             case '*':addToken(STAR);break;
@@ -52,11 +61,14 @@ public class Scanner {
            case '&':addToken(CONCAT);break;
             case '-':
                 if(match('-')){
-                    // for comments 
-
-                    while(peek() != '\n' && !isAtEnd()){
-                        advance();
-                    } 
+                    if(peek() == ' ' ||peek() == '\n' || isAtEnd()){
+                        // for comments 
+                        while(peek() != '\n' && !isAtEnd()){
+                            advance();
+                        } 
+                    }else{
+                        addToken(MINUSMINUS);
+                    }
                     
                 } else{
                     addToken(MINUS);
@@ -243,7 +255,7 @@ public class Scanner {
         String numberLiteral = source.substring(start, current);
      
         if (isFloat) {
-            System.out.println("it floooaat");
+            // System.out.println("it floooaat");
             addToken(NUMBER, Double.parseDouble(numberLiteral));
         } else {
             addToken(NUMBER, Integer.parseInt(numberLiteral)); 
@@ -324,7 +336,8 @@ public class Scanner {
         // keywords.put("DILI",  KUNGDILI);
         keywords.put("WALA", KUNGWALA); //done
         keywords.put("PUNDOK",  PUNDOK); //done
-        keywords.put("ALANGSA",  ALANGSA);
+        keywords.put("ALANG",  ALANG); //DONE
+        keywords.put("SA",  SA); //DONE
         keywords.put("MINTRAS",  MINTRAS);
         keywords.put("NUMERO",  NUMERO); // done
         keywords.put("LETRA",  LETRA); // TODO

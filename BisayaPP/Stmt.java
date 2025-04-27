@@ -17,6 +17,7 @@ abstract class Stmt {
     R visitKungStmt(Kung stmt);
     R visitSugodStmt(Sugod stmt);
     R visitDawatStmt(Dawat stmt);
+    R visitMintrasStmt(Mintras stmt);
     }
   static class Block extends Stmt {
     Block(List<Stmt> statements) {
@@ -165,6 +166,20 @@ abstract class Stmt {
     }
 
     final List<Token> names;
+  }
+  static class Mintras extends Stmt {
+    Mintras(Expr condition, Stmt body) {
+      this.condition = condition;
+      this.body = body;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+    return visitor.visitMintrasStmt(this);
+    }
+
+    final Expr condition;
+    final Stmt body;
   }
 
     abstract <R> R accept(Visitor<R> visitor);

@@ -3,6 +3,7 @@ package BisayaPP;
 import static BisayaPP.TokenType.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Parser {
@@ -18,7 +19,7 @@ public class Parser {
     List<Stmt> parse(){
         List<Stmt> statements = new ArrayList<>();
         try {
-            System.out.println("HEREEEEEEEEEEEEE");
+            // System.out.println("HEREEEEEEEEEEEEE");
             if(!peek().lexeme.equals("SUGOD")){
                 throw error(peek(),"Kailangan sugod sugod");
             } 
@@ -48,6 +49,7 @@ public class Parser {
             
             return statement();
         } catch (ParseError e) {
+            // System.out.println("TUNG TUNG TUNG SAHUR");
             synchronize();
             return null;
         }
@@ -72,7 +74,11 @@ public class Parser {
 
     }
     private Stmt statement(){
-        if(match(ALANGSA)) return forStatement();
+        if(match(ALANG)){
+            consume(SA, "Kailangan naay SA inig human sa ALANG");
+            return forStatement();
+          
+        } 
         if(match(IF)) return ifStatement();
         
         if(match(PRINT)) return printStatement();
@@ -82,48 +88,74 @@ public class Parser {
         if(match(IPAKITA)) return ipakitaStatement();
         if(match(KUNG)) return kungStatement();
         if(match(DAWAT)) return dawatStatement();
+        if(match(MINTRAS)) return mintrasStatement();
 
 
 
         return expressionStatement();
     }
+
+    private Stmt mintrasStatement(){
+        // System.out.println("uuuuuuuu");
+        consume(LEFT_PAREN, "Dapat naay '(' human sa MINTRAS");
+        Expr condition = expression();
+        consume(RIGHT_PARENT, "Dapat naay ')' human sa kundisyon");
+        consume(PUNDOK, "Kailangan naay 'PUNDOK' inig human sa expression sa MINTRAS");
+
+        Stmt body = statement();
+        return new Stmt.Mintras(condition,body);
+
+    }
     
     private Stmt forStatement(){
-        consume(LEFT_PAREN, "Expect '(' after for");
-        Stmt initializer;
-        if(match(COMMA)){
-            initializer = null;
-        }else if(match(VAR)){// TODO: Edit using mugna
-            initializer = varDeclaration();
-        } else{
+        consume(LEFT_PAREN, "Dapat naay '(' human sa ALANG SA");
+
+        // for(NUMERO i = 0 <========== , i<n;i++)
+        Stmt initializer = null;
+        if(match(MUGNA)){
+            initializer = forLoopVar();
+            // initializer = varDeclaration();
+        }else if(!check(COMMA)){
             initializer = expressionStatement();
         }
+        consume(COMMA, "Dapat naay ',' human sa initializer");
+
+        // for(NUMERO i = 0, i<n <========== ,i++)
         Expr condition = null;
         if(!check(COMMA)){
             condition = expression();
         }
-        consume(COMMA, "Exprct comma after loop condition");
+        consume(COMMA, "Kailangan naay comma inig human sa condition");
 
+        // for(NUMERO i = 0  , i<n;i++<==========)
+    
         Expr increment = null;
         if (!check(RIGHT_PARENT)) {
-          increment = expression();
+            increment = expression();
         }
-        consume(RIGHT_PARENT, "Expect ')' after for clauses.");
+        consume(RIGHT_PARENT, "Kailangan naay ')' inig human ");
         consume(PUNDOK, "pundok napud kulang");
         Stmt body = statement();
-
+    
         if(increment != null){
             body = new Stmt.Block(Arrays.asList(body, new Stmt.Expression(increment)));
         }
-        if(condition == null){} condition = new Expr.Literal(true);
+        if(condition == null) condition = new Expr.Literal(true);
         body = new Stmt.While(condition, body);
-
+    
         if(initializer != null){
             body = new Stmt.Block(Arrays.asList(initializer, body));
         }
-
+    
         return body;
+    }
+    private Stmt forLoopVar(){
+        Token type = consume(NUMERO, "Dapat naay data type human sa MUGNA");
+        Token name = consume(IDENTIFIER, "Dapat nay variable name");
+        Expr init = null;
+        if(match(EQUAL)) init = expression();
 
+        return new Stmt.Mugna(type,Collections.singletonList(name), Collections.singletonList(init));
     }
     private Stmt ifStatement(){
         consume(LEFT_PAREN, "Expect '(' after 'if'.");
@@ -322,12 +354,21 @@ public class Parser {
         return expr;
     }
     private Expr unary(){
-        if(match(BANG, MINUS)){
+        if(match(BANG, MINUS,DILI)){
             Token operator = previous();
             Expr right = unary();
             return new Expr.Unary(operator,right);
         }
-        return primary();
+        // return primary();
+        return postfix();
+    }
+    private Expr postfix(){
+        Expr expr = primary();
+        while(match(PLUSPLUS, MINUSMINUS)){
+            Token operator = previous();
+            expr = new Expr.Postfix(expr,operator);
+        }
+        return expr;
     }
     private Expr primary(){
         if(match(FALSE)) return new Expr.Literal(false);
@@ -407,14 +448,18 @@ public class Parser {
                 // BISAYA++
                 case MUGNA:
                 case KATAPUSAN:
-                // case MINTRAS:
-                // case KUNG:
-                // case PUNDOK:
-
-                    return;
+                case SUGOD:
+                case MINTRAS:
+                case KUNG:
+                case PUNDOK:
+                case ALANG:
+                // case SA:
+                case IPAKITA:
+                return;
             }
             advance();
         }
+        // System.out.println("No error");
     }
 
     

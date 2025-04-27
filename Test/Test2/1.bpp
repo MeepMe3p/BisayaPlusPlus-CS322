@@ -1,0 +1,10 @@
+SUGOD
+    MUGNA NUMERO i = 0
+
+    MINTRAS (i < 100)PUNDOK{
+        IPAKITA: i  & " "
+        i++
+    }
+
+
+KATAPUSAN

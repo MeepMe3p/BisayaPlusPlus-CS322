@@ -24,6 +24,7 @@ public class GenerateAST {
             "Variable : Token name" 
             // BISAYA++
             , "AssignBis: Token type, Token name, Expr value"
+            ,"Postfix   : Expr left, Token operator"
         ));
 
         defineAST(outputDir,"Stmt",Arrays.asList(
@@ -41,6 +42,7 @@ public class GenerateAST {
             ,"Kung       : Expr condition, Stmt thenBranch, Stmt elseBranch"
             ,"Sugod       : List<Stmt> statements"
             ,"Dawat       : List<Token> names"
+            ,"Mintras       : Expr condition, Stmt body"
             
         ));
     }

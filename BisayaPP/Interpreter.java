@@ -2,6 +2,7 @@ package BisayaPP;
 
 import BisayaPP.Expr.Assign;
 import BisayaPP.Expr.Logical;
+import BisayaPP.Expr.Postfix;
 import BisayaPP.Expr.Variable;
 import BisayaPP.Stmt.Block;
 import BisayaPP.Stmt.Dawat;
@@ -9,12 +10,15 @@ import BisayaPP.Stmt.Expression;
 import BisayaPP.Stmt.If;
 import BisayaPP.Stmt.Ipakita;
 import BisayaPP.Stmt.Kung;
+import BisayaPP.Stmt.Mintras;
 import BisayaPP.Stmt.Mugna;
 import BisayaPP.Stmt.Print;
 import BisayaPP.Stmt.Sugod;
 import BisayaPP.Stmt.Var;
 import BisayaPP.Stmt.While;
 import static BisayaPP.TokenType.EQUAL_EQUAL;
+import static BisayaPP.TokenType.MINUSMINUS;
+import static BisayaPP.TokenType.PLUSPLUS;
 import java.util.List;
 import java.util.Scanner;
 
@@ -183,7 +187,9 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
         switch(expr.operator.type){
             case BANG:
-                return !isTruthy(right);
+                // return !isTruthy(right);
+            case DILI: 
+                return !isTruthy(right);                
             case MINUS: 
                 checkNumberOperand(expr.operator, right);
                 if(right instanceof Integer){
@@ -526,6 +532,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             } else if(existing instanceof String){
                 environment.assign(varToken,"LETRA", rawValue);
             } else if(existing instanceof Integer){
+
                 environment.assign(varToken,"NUMERO", Integer.parseInt(rawValue));
             }
             else{
@@ -535,6 +542,47 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitMintrasStmt(Mintras stmt) {
+        while(isTruthy(evaluate(stmt.condition))){
+            execute(stmt.body);
+        }
+        return null;
+    }
+
+
+    @Override
+    public Object visitPostfixExpr(Postfix expr) {
+        // Object value = evaluate(expr.left);
+        
+        if(!(expr.left instanceof Expr.Variable)){
+            throw new RuntimeError(expr.operator, "Left side must be a variable for postfix operation.");
+        }
+
+        Expr.Variable variable = (Expr.Variable) expr.left;
+        Token varName = variable.name;
+
+        Object value = evaluate(expr.left);
+        String varType = environment.getType(varName, value);
+
+        if(!varType.equals("NUMERO") ){
+            throw new RuntimeError(varName, "NUMERO ra ug TIPIK pwede ma ++ or --");
+        }
+
+        if(expr.operator.type == PLUSPLUS){
+            environment.assign(varName, varType, (int)value+1);
+            return value;
+        }else if(expr.operator.type == MINUSMINUS){
+            environment.assign(varName, varType,(int)value-1);
+            return value;
+        }
+
+        throw new RuntimeError(expr.operator,"Unknown operator");
+        
+
+     
+    }
+    
 
 
 

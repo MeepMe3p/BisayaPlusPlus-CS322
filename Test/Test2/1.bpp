@@ -1,10 +1,10 @@
 SUGOD
-    MUGNA NUMERO i = 0
-
-    MINTRAS (i < 100)PUNDOK{
-        IPAKITA: i  & " "
-        i++
+    KUNDI (5<1)
+    PUNDOK {
+        IPAKITA: "Kani e print"
     }
-
-
+    KUNG WALA
+    PUNDOK {
+        IPAKITA: "Hahaha"
+    }       
 KATAPUSAN

@@ -18,6 +18,7 @@ abstract class Stmt {
     R visitSugodStmt(Sugod stmt);
     R visitDawatStmt(Dawat stmt);
     R visitMintrasStmt(Mintras stmt);
+    R visitKundiStmt(Kundi stmt);
     }
   static class Block extends Stmt {
     Block(List<Stmt> statements) {
@@ -180,6 +181,22 @@ abstract class Stmt {
 
     final Expr condition;
     final Stmt body;
+  }
+  static class Kundi extends Stmt {
+    Kundi(Expr condition, Stmt thenBranch, Stmt elseBranch) {
+      this.condition = condition;
+      this.thenBranch = thenBranch;
+      this.elseBranch = elseBranch;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+    return visitor.visitKundiStmt(this);
+    }
+
+    final Expr condition;
+    final Stmt thenBranch;
+    final Stmt elseBranch;
   }
 
     abstract <R> R accept(Visitor<R> visitor);

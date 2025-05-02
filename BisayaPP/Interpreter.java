@@ -16,6 +16,9 @@ import BisayaPP.Stmt.Print;
 import BisayaPP.Stmt.Sugod;
 import BisayaPP.Stmt.Var;
 import BisayaPP.Stmt.While;
+import BisayaPP.Stmt.Kundi;
+
+import static BisayaPP.TokenType.DILI;
 import static BisayaPP.TokenType.EQUAL_EQUAL;
 import static BisayaPP.TokenType.MINUSMINUS;
 import static BisayaPP.TokenType.PLUSPLUS;
@@ -447,6 +450,15 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitKungStmt(Kung stmt) {
+        if (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.thenBranch);
+        } else if (stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+        return null;
+    }
+    @Override
+    public Void visitKundiStmt(Kundi stmt) {
         if(isTruthy(evaluate(stmt.condition))){
             execute(stmt.thenBranch);
         }else if(stmt.elseBranch != null){

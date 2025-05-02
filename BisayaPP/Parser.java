@@ -88,7 +88,9 @@ public class Parser {
         if(match(IPAKITA)) return ipakitaStatement();
         if(match(KUNG)) return kungStatement();
         if(match(DAWAT)) return dawatStatement();
-        if(match(MINTRAS)) return mintrasStatement();
+        if (match(MINTRAS))
+            return mintrasStatement();
+        if(match(KUNDI)) return kundiStatement();
 
 
 
@@ -157,19 +159,47 @@ public class Parser {
 
         return new Stmt.Mugna(type,Collections.singletonList(name), Collections.singletonList(init));
     }
-    private Stmt ifStatement(){
+
+    private Stmt ifStatement() {
         consume(LEFT_PAREN, "Expect '(' after 'if'.");
         Expr condition = expression();
         consume(RIGHT_PARENT, "Expect ')' after if condition.");
 
         Stmt thenBranch = statement();
         Stmt elseBranch = null;
-        if(match(ELSE)){
+        if (match(ELSE)) {
             elseBranch = statement();
         }
         return new Stmt.If(condition, thenBranch, elseBranch);
     }
 
+    private Stmt kundiStatement()
+    {
+     consume(LEFT_PAREN, "Kailangan adunay '(' inig human sa 'KUNDI'");
+     Expr condition = expression();
+
+     condition = new Expr.Unary(
+        new Token(TokenType.BANG, "!", null, previous().line),
+        condition
+     );
+    
+     consume (RIGHT_PARENT, "Kailangan isira gamit ang ')' inig human sa expresyon" );
+     consume (PUNDOK, "Kailangan naay 'PUNDOK' inig human sa KUNDI");
+
+    Stmt thenBranch = statement();
+    Stmt elseBranch = null;
+
+    if (match(KUNGDILI)) {
+        elseBranch = kungStatement();  
+    } 
+    else if (match(KUNGWALA)) {
+        consume(PUNDOK, "Kailangan naay 'PUNDOK' inig human sa KUNG WALA");
+        elseBranch = statement();
+    }
+    
+    return new Stmt.If(condition, thenBranch, elseBranch);
+
+    }
     private Stmt kungStatement() {
         consume(LEFT_PAREN, "Kailangan adunay '(' inig human sa 'KUNG'");
         Expr condition = expression();
@@ -453,6 +483,7 @@ public class Parser {
                 case KUNG:
                 case PUNDOK:
                 case ALANG:
+                case KUNDI:
                 // case SA:
                 case IPAKITA:
                 return;

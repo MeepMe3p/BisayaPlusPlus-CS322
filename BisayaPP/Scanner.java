@@ -349,7 +349,7 @@ public class Scanner {
         // keywords.put("\"OO\"",TRUE);
         // keywords.put("\"DILI\"",FALSE);
         keywords.put("TIPIK",  TIPIK); // done
-
+        keywords.put("KUNDI",  KUNDI); // done
     }
 
 }

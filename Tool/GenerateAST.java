@@ -40,9 +40,10 @@ public class GenerateAST {
             ,"Ipakita    : Expr expression"
             ,"Mugna      : Token type, List<Token> names, List<Expr> initializers"
             ,"Kung       : Expr condition, Stmt thenBranch, Stmt elseBranch"
-            ,"Sugod       : List<Stmt> statements"
-            ,"Dawat       : List<Token> names"
-            ,"Mintras       : Expr condition, Stmt body"
+            ,"Sugod      : List<Stmt> statements"
+            ,"Dawat      : List<Token> names"
+            ,"Mintras    : Expr condition, Stmt body"
+            ,"Kundi      : Expr condition, Stmt thenBranch, Stmt elseBranch"
             
         ));
     }

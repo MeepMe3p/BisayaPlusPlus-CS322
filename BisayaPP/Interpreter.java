@@ -67,7 +67,6 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
                 case BANG_EQUAL: 
                 case NOT_EQUAL: return !numLeft.equals(numRight);
                 case EQUAL_EQUAL:
-                    System.out.println("hereee");
                  return isEqual(left, right);
                 case EQUAL: return numLeft.equals(numRight);
                 case MINUS: return performOperation(numLeft, numRight, '-');

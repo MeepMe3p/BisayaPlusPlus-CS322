@@ -210,6 +210,7 @@ public class Parser {
         if(match(KUNG)) return kungStatement();
         if(match(DAWAT)) return dawatStatement();
         if(match(MINTRAS)) return mintrasStatement();
+        if(match(HANGTUD)) return hangtudStatement();
 
         return expressionStatement();
     }
@@ -224,7 +225,18 @@ public class Parser {
         Stmt body = statement();
         return new Stmt.Mintras(condition,body);
     }
-    
+
+    private Stmt hangtudStatement(){
+        consume(LEFT_PAREN, "Dapat naay '(' human sa HANGTUD");
+        Expr condition = expression();
+        consume(RIGHT_PARENT, "Dapat naay ')' human sa kundisyon");
+
+        consume(PUNDOK, "Kailangan naay 'PUNDOK' inig human sa expression sa HANGTUD");
+
+        Stmt body = statement();
+        return new Stmt.Hangtud(condition,body);
+    }
+
     private Stmt forStatement(){
         consume(LEFT_PAREN, "Dapat naay '(' human sa ALANG SA");
 
@@ -456,6 +468,7 @@ public class Parser {
                 case KATAPUSAN:
                 case SUGOD:
                 case MINTRAS:
+                case HANGTUD:
                 case KUNG:
                 case PUNDOK:
                 case ALANG:

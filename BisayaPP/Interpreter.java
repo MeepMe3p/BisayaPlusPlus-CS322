@@ -7,6 +7,7 @@ import BisayaPP.Expr.Variable;
 import BisayaPP.Stmt.Block;
 import BisayaPP.Stmt.Dawat;
 import BisayaPP.Stmt.Expression;
+import BisayaPP.Stmt.Hangtud;
 import BisayaPP.Stmt.If;
 import BisayaPP.Stmt.Ipakita;
 import BisayaPP.Stmt.Kung;
@@ -550,6 +551,13 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitHangtudStmt(Hangtud stmt) {
+        while (!isTruthy(evaluate(stmt.condition))){
+            execute(stmt.body);
+        }
+        return null;
+    }
 
     @Override
     public Object visitPostfixExpr(Postfix expr) {
@@ -578,12 +586,5 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         }
 
         throw new RuntimeError(expr.operator,"Unknown operator");
-        
-
-     
     }
-    
-
-
-
 }

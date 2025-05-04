@@ -66,6 +66,7 @@ public class Scanner {
         keywords.put("ALANG",     ALANG);
         keywords.put("SA",        SA);
         keywords.put("MINTRAS",   MINTRAS);
+        keywords.put("HANGTUD",   HANGTUD);
         keywords.put("NUMERO",    NUMERO);
         keywords.put("LETRA",     LETRA); // Optional: future usage
         keywords.put("TINUOD",    TINUOD);

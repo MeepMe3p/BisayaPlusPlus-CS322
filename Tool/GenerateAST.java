@@ -51,7 +51,8 @@ public class GenerateAST {
                 "Kung       : Expr condition, Stmt thenBranch, Stmt elseBranch",
                 "Sugod      : List<Stmt> statements",
                 "Dawat      : List<Token> names",
-                "Mintras    : Expr condition, Stmt body"
+                "Mintras    : Expr condition, Stmt body",
+                "Hangtud    : Expr condition, Stmt body"
         ));
     }
 

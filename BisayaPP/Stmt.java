@@ -18,6 +18,7 @@ abstract class Stmt {
         R visitSugodStmt(Sugod stmt);
         R visitDawatStmt(Dawat stmt);
         R visitMintrasStmt(Mintras stmt);
+        R visitHangtudStmt(Hangtud stmt);
     }
 
     static class Block extends Stmt {
@@ -191,6 +192,21 @@ abstract class Stmt {
         @Override
         <R> R accept(Visitor<R> visitor) {
             return visitor.visitMintrasStmt(this);
+        }
+    }
+
+    static class Hangtud extends Stmt {
+        final Expr condition;
+        final Stmt body;
+
+        Hangtud(Expr condition, Stmt body) {
+            this.condition = condition;
+            this.body = body;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitHangtudStmt(this);
         }
     }
 

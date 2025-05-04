@@ -52,7 +52,9 @@ public class GenerateAST {
                 "Sugod      : List<Stmt> statements",
                 "Dawat      : List<Token> names",
                 "Mintras    : Expr condition, Stmt body",
-                "Hangtud    : Expr condition, Stmt body"
+                "Hangtud    : Expr condition, Stmt body",
+                "Kundi      : Expr condition, Stmt thenBranch, Stmt elseBranch"
+
         ));
     }
 

@@ -61,6 +61,7 @@ public class Scanner {
         keywords.put("KATAPUSAN", KATAPUSAN);
         keywords.put("DAWAT",     DAWAT);
         keywords.put("KUNG",      KUNG);
+        keywords.put("KUNDI",     KUNDI);
         keywords.put("WALA",      KUNGWALA);
         keywords.put("PUNDOK",    PUNDOK);
         keywords.put("ALANG",     ALANG);

@@ -15,6 +15,7 @@ abstract class Stmt {
         R visitIpakitaStmt(Ipakita stmt);
         R visitMugnaStmt(Mugna stmt);
         R visitKungStmt(Kung stmt);
+        R visitKundiStmt(Kundi stmt);
         R visitSugodStmt(Sugod stmt);
         R visitDawatStmt(Dawat stmt);
         R visitMintrasStmt(Mintras stmt);
@@ -210,6 +211,22 @@ abstract class Stmt {
         }
     }
 
+    static class Kundi extends Stmt {
+        final Expr condition;
+        final Stmt thenBranch;
+        final Stmt elseBranch;
+
+        Kundi(Expr condition, Stmt thenBranch, Stmt elseBranch) {
+          this.condition = condition;
+          this.thenBranch = thenBranch;
+          this.elseBranch = elseBranch;
+        }
+
+        @Override
+        <R> R accept(Visitor<R> visitor) {
+            return visitor.visitKundiStmt(this);
+        }
+    }
 
     abstract <R> R accept(Visitor<R> visitor);
 }

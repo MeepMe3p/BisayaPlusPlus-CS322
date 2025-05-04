@@ -25,7 +25,4 @@ public enum TokenType {
     UG, O, DILI,MINTRAS,
 
     COLON, NEWLINE,
-
-
-
 }

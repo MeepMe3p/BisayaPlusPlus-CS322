@@ -7,6 +7,7 @@ import BisayaPP.Expr.Variable;
 import BisayaPP.Stmt.Block;
 import BisayaPP.Stmt.Dawat;
 import BisayaPP.Stmt.Expression;
+import BisayaPP.Stmt.Hangtud;
 import BisayaPP.Stmt.If;
 import BisayaPP.Stmt.Ipakita;
 import BisayaPP.Stmt.Kung;
@@ -16,6 +17,9 @@ import BisayaPP.Stmt.Print;
 import BisayaPP.Stmt.Sugod;
 import BisayaPP.Stmt.Var;
 import BisayaPP.Stmt.While;
+import BisayaPP.Stmt.Kundi;
+
+import static BisayaPP.TokenType.DILI;
 import static BisayaPP.TokenType.EQUAL_EQUAL;
 import static BisayaPP.TokenType.MINUSMINUS;
 import static BisayaPP.TokenType.PLUSPLUS;
@@ -66,7 +70,6 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
                 case BANG_EQUAL: 
                 case NOT_EQUAL: return !numLeft.equals(numRight);
                 case EQUAL_EQUAL:
-                    System.out.println("hereee");
                  return isEqual(left, right);
                 case EQUAL: return numLeft.equals(numRight);
                 case MINUS: return performOperation(numLeft, numRight, '-');
@@ -447,6 +450,15 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitKungStmt(Kung stmt) {
+        if (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.thenBranch);
+        } else if (stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+        return null;
+    }
+    @Override
+    public Void visitKundiStmt(Kundi stmt) {
         if(isTruthy(evaluate(stmt.condition))){
             execute(stmt.thenBranch);
         }else if(stmt.elseBranch != null){
@@ -550,6 +562,13 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitHangtudStmt(Hangtud stmt) {
+        while (!isTruthy(evaluate(stmt.condition))){
+            execute(stmt.body);
+        }
+        return null;
+    }
 
     @Override
     public Object visitPostfixExpr(Postfix expr) {
@@ -578,12 +597,5 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         }
 
         throw new RuntimeError(expr.operator,"Unknown operator");
-        
-
-     
     }
-    
-
-
-
 }

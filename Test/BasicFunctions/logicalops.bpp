@@ -2,6 +2,6 @@ SUGOD
 MUGNA NUMERO ctr
 ALANG SA (ctr=1, ctr<=10, ctr++)
 PUNDOK{
-IPAKITA: ctr & ‘ ‘
+    IPAKITA: ctr & ' '
 }
 KATAPUSAN

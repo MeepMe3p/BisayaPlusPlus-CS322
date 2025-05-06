@@ -4,7 +4,9 @@ SUGOD
 
 	sum = sum + 5
 
-	MUGNA TIPIK ave
+	MUGNA TIPIK ave = sum / 2
+
+	IPAKITA: sum & $ & ave
 
 KATAPUSAN
  

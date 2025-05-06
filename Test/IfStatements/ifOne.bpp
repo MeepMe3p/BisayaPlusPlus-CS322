@@ -1,4 +1,5 @@
 SUGOD
+
 MUGNA NUMERO x = 31
 KUNG (x < 0)
 PUNDOK{
@@ -16,7 +17,7 @@ PUNDOK{
 }
 KUNG WALA
 PUNDOK{
-    IPAKITA: "DAKOG "
+    IPAKITA: "DAKOG"
 
 }
 

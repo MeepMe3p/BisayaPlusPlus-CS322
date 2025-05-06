@@ -2,4 +2,6 @@ SUGOD
 	MUGNA NUMERO x, z
 	MUGNA TINUOD numero="OO"
 	x=z=6
+
+	IPAKITA: x & $ & z
 KATAPUSAN

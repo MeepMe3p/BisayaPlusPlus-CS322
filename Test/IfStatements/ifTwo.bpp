@@ -2,14 +2,13 @@ SUGOD
   MUGNA NUMERO x
   DAWAT: x
 
-  KUNG(x < 18)
-  {
+  KUNG (x < 18) PUNDOK {
     IPAKITA: "di paka pwede musulod"
-  } KUNG DILI (x > 18)
-  PUNDOK{
+  }
+  KUNG DILI (x > 18) PUNDOK {
     IPAKITA: "pwede naka musulod"
-  } KUNG WALA 
-  PUNDOK{
+  }
+  KUNG WALA PUNDOK {
     IPAKITA: "exactly 18"
   }
 KATAPUSAN

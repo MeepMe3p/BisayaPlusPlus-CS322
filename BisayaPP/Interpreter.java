@@ -41,132 +41,101 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
-        // System.out.println("binary");
         Object left = evaluate(expr.left);
         Object right = evaluate(expr.right);
+        TokenType operatorType = expr.operator.type;
 
-        if (expr.operator.type == TokenType.PLUS) {
+        // Handle string concatenation with +
+        if (operatorType == TokenType.PLUS) {
             if (left instanceof String || right instanceof String) {
-                // return left.toString() + right.toString();
                 return stringify(left) + stringify(right);
             }
         }
-        if(left instanceof String && right instanceof String && expr.operator.type.equals(EQUAL_EQUAL)){
-            // System.out.println("hereeeeeeeeeee");
+
+        // Handle string comparison
+        if(left instanceof String && right instanceof String && operatorType.equals(EQUAL_EQUAL)){
             return isEqual(left, right);
         }
 
+        // Handle numeric operations
         if(left instanceof Number && right instanceof Number){
             Number numLeft = toNumber(left);
             Number numRight = toNumber(right);
-            // System.out.println("Type is"+ expr.operator.type);
-            switch(expr.operator.type){
-                // case GREATER: return true;
-                // case GREATER: return numLeft.doubleValue() > numRight.doubleValue();
-                case GREATER: return performComparison(numLeft, numRight, '>');
+
+            switch(operatorType){
+                case GREATER:       return performComparison(numLeft, numRight, '>');
                 case GREATER_EQUAL: return performComparison(numLeft, numRight, 'g');
-                case LESS: return performComparison(numLeft, numRight, '<');
-                case LESS_EQUAL: return performComparison(numLeft, numRight, 'l');
-                case BANG_EQUAL: 
-                case NOT_EQUAL: return !numLeft.equals(numRight);
-                case EQUAL_EQUAL:
-                 return isEqual(left, right);
-                case EQUAL: return numLeft.equals(numRight);
-                case MINUS: return performOperation(numLeft, numRight, '-');
-                // case PLUS: return (int)numLeft + (int)numRight;
-                case PLUS: return performOperation(numLeft, numRight, '+');
+                case LESS:          return performComparison(numLeft, numRight, '<');
+                case LESS_EQUAL:    return performComparison(numLeft, numRight, 'l');
+
+                case BANG_EQUAL:
+                case NOT_EQUAL:     return !numLeft.equals(numRight);
+
+                case EQUAL_EQUAL:   return isEqual(left, right);
+                case EQUAL:         return numLeft.equals(numRight);
+
+                case MINUS:         return performOperation(numLeft, numRight, '-');
+                case PLUS:          return performOperation(numLeft, numRight, '+');
+                case STAR:          return performOperation(numLeft, numRight, '*');
+                case MODULO:        return performOperation(numLeft, numRight, '%');
+
                 case SLASH: 
                     if (numRight.doubleValue() == 0) {
                         throw new RuntimeError(expr.operator, "Dili kadivide ug zero.");
                     }
                     return numLeft.doubleValue() / numRight.doubleValue();
-                case STAR: return performOperation(numLeft, numRight, '*');
-                case MODULO: return performOperation(numLeft, numRight, '%');
             }
         }
-        
-        if(expr.operator.type == TokenType.CONCAT){
-            // return left.toString() + right.toString();
+
+        // Handle explicit string concatenation
+        if(operatorType == TokenType.CONCAT){
             return stringify(left) + stringify(right);
         }
+
+        // If types are incompatible
         throw new RuntimeError(expr.operator, "Kailangan duha ka string or duha ka numero.");
     }
+
     private Number toNumber(Object obj) {
         if (obj instanceof Integer) return (Integer) obj;
         if (obj instanceof Double) return (Double) obj;
         throw new RuntimeError(null, "Operand must be a number.");
     }
-    private boolean performComparison(Number numLeft, Number numRight, char operation){
-        switch(operation){
-            case '<':
-                if (numLeft instanceof Double || numRight instanceof Double) {
-                    return numLeft.doubleValue() < numRight.doubleValue();
-                } else {
-                    return numLeft.intValue() < numRight.intValue();
-                }
-            case '>':
-                if (numLeft instanceof Double || numRight instanceof Double) {
-                    return numLeft.doubleValue() > numRight.doubleValue();
-                } else {
-                    return numLeft.intValue() > numRight.intValue();
-                }
-            case '=':
-                if (numLeft instanceof Double || numRight instanceof Double) {
-                    return numLeft.doubleValue() == numRight.doubleValue();
-                } else {
-                    return numLeft.intValue() == numRight.intValue();
-                }
-            case '!':
-                if (numLeft instanceof Double || numRight instanceof Double) {
-                    return numLeft.doubleValue() != numRight.doubleValue();
-                } else {
-                    return numLeft.intValue() != numRight.intValue();
-                }
-            case 'g':
-                if (numLeft instanceof Double || numRight instanceof Double) {
-                    return numLeft.doubleValue() >= numRight.doubleValue();
-                } else {
-                    return numLeft.intValue() >= numRight.intValue();
-                }
-            case 'l':
-                if (numLeft instanceof Double || numRight instanceof Double) {
-                    return numLeft.doubleValue() <= numRight.doubleValue();
-                } else {
-                    return numLeft.intValue() <= numRight.intValue();
-                }
-            default: throw new RuntimeError(null, "Unknown operator");
 
-            
-        }
-    }
-    private Number performOperation(Number left, Number right, char operation){
-        boolean isDouble = (left instanceof Double) || (right instanceof Double);
-        // System.out.println("ISdouble"+isDouble);
-        switch(operation){
+    private boolean performComparison(Number numLeft, Number numRight, char operator) {
+        double left = numLeft.doubleValue();
+        double right = numRight.doubleValue();
 
-            case '+':
-                if(isDouble) return Double.valueOf(left.doubleValue() + right.doubleValue());
-                else return Integer.valueOf(left.intValue() + right.intValue());
-            case '-':
-                if(isDouble) return Double.valueOf(left.doubleValue() - right.doubleValue());
-                else return Integer.valueOf(left.intValue() - right.intValue());
-            case '*':
-                if(isDouble) return Double.valueOf(left.doubleValue() * right.doubleValue());
-                else return Integer.valueOf(left.intValue() * right.intValue());
-            case '/':
-                if(isDouble) return Double.valueOf(left.doubleValue() / right.doubleValue());
-                else return Integer.valueOf(left.intValue() / right.intValue());
-            case '%':
-                if(isDouble) return Double.valueOf(left.doubleValue() % right.doubleValue());
-                else return Integer.valueOf(left.intValue() % right.intValue());
-            // case '-': return isDouble ? left.doubleValue() - right.doubleValue() : left.intValue() - right.intValue();
-            // case '*': return isDouble ? left.doubleValue() * right.doubleValue() : left.intValue() * right.intValue();
-            // case '%': return isDouble ? left.doubleValue() % right.doubleValue() : left.intValue() % right.intValue();
-            default: throw new RuntimeError(null, "Unknown operator");
-        }
+        return switch (operator) {
+            case '<' -> left < right;
+            case '>' -> left > right;
+            case '=' -> left == right;
+            case '!' -> left != right;
+            case 'g' -> left >= right;
+            case 'l' -> left <= right;
+            default -> throw new RuntimeError(null, "Unknown comparison operator: '" + operator + "'");
+        };
     }
-    private void checkNumberOperands(Token operator, Object left, Object right){
-        // if(left instanceof Double && right instanceof Double) return;
+
+    private Number performOperation(Number numLeft, Number numRight, char operation) {
+        boolean isDouble = (numLeft instanceof Double) || (numRight instanceof Double);
+
+        double left = numLeft.doubleValue();
+        double right = numRight.doubleValue();
+
+        double result = switch (operation) {
+            case '+' -> left + right;
+            case '-' -> left - right;
+            case '*' -> left * right;
+            case '/' -> left / right;
+            case '%' -> left % right;
+            default -> throw new RuntimeError(null, "Unknown arithmetic operator: '" + operation + "'");
+        };
+
+        return isDouble ? result : (int) result;
+    }
+
+    private void checkNumberOperands(Token operator, Object left, Object right) {
         if(left instanceof Number && right instanceof Number) return;
         throw new RuntimeError(operator, "Operands must be a number");
     }
@@ -201,9 +170,8 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
 
                     return -(double) right;
                 }
-
-
         }
+
         return null;
     }
     
@@ -211,11 +179,13 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         if(operand instanceof Double || operand instanceof Integer) return;
         throw new RuntimeError(operator, "Operand must be a number");
     }
+
     private boolean isTruthy(Object object){
         if(object == null) return false;
         if(object instanceof Boolean) return (boolean) object;
         return true;
     }
+
     private boolean isEqual(Object a, Object b){
         // System.out.println("paskoooo");
         if(a == null && b == null) return false;
@@ -227,12 +197,15 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         }
         return a.equals(b);
     }
+
     private Object evaluate (Expr expr){
         return expr.accept(this);
     }
+
     private void execute(Stmt stmt){
         stmt.accept(this);
     }
+
     void executeBlock(List<Stmt> statements, Environment environment){
         Environment previous = this.environment;
         try {
@@ -244,7 +217,6 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             this.environment = previous;
         }
     }
-    
 
     @Override
     public Void visitExpressionStmt(Expression stmt) {
@@ -259,6 +231,8 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         // System.out.println(stringify(value));
         return null;
     }
+
+
     
     // BISAYA ++ STUFF
     @Override
@@ -267,6 +241,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         System.out.println(stringify(value));
         return null;   
     }
+
     @Override
     public Void visitMugnaStmt(Mugna stmt) {
         // System.out.println("No error");
@@ -277,24 +252,8 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             // System.out.println(name + " " + initializer);
             
             Object value;
-            if(initializer!=null){
+            if(initializer!=null) {
                 value = evaluate(initializer);
-                // System.out.println("value is"+ value);
-                // if (dataType.lexeme.equals("TINUOD")) {
-                //     if (value instanceof String) {
-                //         String strVal = (String) value;
-                //         if (strVal.equals("OO")) {
-                //             value = true;
-                //         } else if (strVal.equals("DILI")) {
-                //             value = false;
-                //         } else {
-                //             throw new RuntimeError(name, "Ang TINUOD dapat OO or DILI");
-                //         }
-                //     }
-                //     else if (!(value instanceof Boolean)) {
-                //         throw new RuntimeError(name, "Ang TINUOD dapat OO or DILI");
-                //     }
-                // }
                 if (dataType.lexeme.equals("TINUOD")) {
                     if (value.equals("OO")) {
                         value = true;    
@@ -308,83 +267,38 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
                         throw new RuntimeError(name, "Ang TINUOD dapat OO or DILI");
                     }
                 }
-
-            }else{
-                switch(stmt.type.lexeme){
-                    case "NUMERO": 
-                    value = 0 ; 
-                        break;
-                        case "TIPIK":
-                        value = 0.0;
-                        break;
-                        case "TINUOD":
-                        value = false;
-                        break;
-                        case "LETRA":
-                        value = "";
-                        break;
-                        default:
-                        throw new RuntimeError(name, "Dili ka type niya: "+ stmt.type.lexeme);
-                    }
-                }
-                // System.out.println("foo");
-                // environment.define(name.lexeme, value);
-                
-                environment.define(name, dataType.lexeme , value); 
+            } else {
+                value = switch (stmt.type.lexeme) {
+                    case "NUMERO" -> 0;
+                    case "TIPIK" -> 0.0;
+                    case "TINUOD" -> false;
+                    case "LETRA" -> "";
+                    default -> throw new RuntimeError(name, "Dili ka type niya: " + stmt.type.lexeme);
+                };
             }
-            // System.out.println("went here");
-            // System.out.println("Type:"+stmt.type);
-            // System.out.println("Names:"+stmt.names);
-            
-            // Object value = null;
-        // Token dataType = stmt.type;
-        // if(stmt.initializer != null){
-        //     value = evaluate(stmt.initializer);
-        // }
-        // for(Token name: stmt.names){
-        //     if(value.equals("OO")){
-        //         environment.define(name, dataType.lexeme , true);
-        //     }else if (value.equals("DILI")) {
-        //         environment.define(name, dataType.lexeme , false);
-                
-        //     }else{
-
-        //         environment.define(name, dataType.lexeme , value);
-        //     }
-        //     // System.out.println("Type: "+ dataType.lexeme+ " "+ name.lexeme + " = " +value);
-        // }
-        // System.out.println("Initi:"+value);
-
-
-        
-
-
+            environment.define(name, dataType.lexeme , value);
+        }
 
         return null;
     }
+
     // =====================
 
     // [17]
     private String stringify(Object object){
         if(object == null) return "nil";
-        if(object instanceof Double){
-            
-            // String text = object.toString();
-            // if(text.endsWith(".0")){
-            //     text = text.substring(0, text.length() - 2);
-            // }
-            // return text;
+        if(object instanceof Double) {
             double number = (Double) object;
-            if(number == (int) number){
+            if(number == (int) number) {
                 return Integer.toString((int) number);
-            }else{
+            } else {
                 return Double.toString(number);
             }
         }
-        if(object instanceof Boolean){
+        if(object instanceof Boolean) {
             return (Boolean) object ? "OO" : "DILI";
         }
-        if(object instanceof String){
+        if(object instanceof String) {
             String str = (String) object;
             if (str.equals("OO") || str.equals("DILI")) {
                 // Treat string "OO"/"DILI" as boolean display
@@ -407,8 +321,6 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         // environment.define(stmt.name.lexeme, value);
         return null;
     }
-
-
 
     @Override
     public Object visitVariableExpr(Variable expr) {
@@ -500,6 +412,7 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
         String inputLine = sc.nextLine();
 
         String [] values = inputLine.split(",");
+
         if (values.length != stmt.names.size()) {
             throw new RuntimeError(stmt.names.get(0), "Kuwang or sobra imo gibutang nga mga value.");
         }
@@ -508,47 +421,23 @@ public class Interpreter implements Expr.Visitor <Object>, Stmt.Visitor<Void> {
             Token varToken = stmt.names.get(i);
             String varName = varToken.lexeme;
             String rawValue = values[i].trim();
-            // String dataType = environment.getType(stmt.names.get(i), rawValue);
 
             Object existing = environment.get(varToken);
-            // Object existing = environment.get(stmt.names.get(i));
-            // System.out.println(existing+ "this is exisitng");
-            // if(existing instanceof Double){
-            //     environment.assign(stmt.names.get(i), Double.parseDouble(rawValue));
-            // } else if(existing instanceof Boolean) {
-            //     if(rawValue.equals("OO")){
-            //         environment.assign(stmt.names.get(i), true);
-            //     }else if(rawValue.equals("DILI")){
-            //         environment.assign(stmt.names.get(i), false);
-            //     }else{
-            //         throw new RuntimeError(stmt.names.get(i), "Ang TINUOD dapat OO or DILI");
-            //     }
-            // } else if(existing instanceof String){
-            //     environment.assign(stmt.names.get(i), rawValue);
-            // } else if(existing instanceof Integer){
-            //     environment.assign(stmt.names.get(i), Integer.parseInt(rawValue));
-            // }
-            // else{
-            //     throw new RuntimeError(stmt.names.get(i), "Walay ingana nga variable");
-            // }
-            if(existing instanceof Double){
-                environment.assign(varToken, "TIPIK",Double.parseDouble(rawValue));
-            } else if(existing instanceof Boolean) {
-                if(rawValue.equals("OO")){
-                    environment.assign(varToken,"TINUOD", true);
-                }else if(rawValue.equals("DILI")){
-                    environment.assign(varToken,"TINUOD", false);
-                }else{
-                    throw new RuntimeError(varToken, "Ang TINUOD dapat OO or DILI");
-                }
-            } else if(existing instanceof String){
-                environment.assign(varToken,"LETRA", rawValue);
-            } else if(existing instanceof Integer){
 
-                environment.assign(varToken,"NUMERO", Integer.parseInt(rawValue));
-            }
-            else{
-                throw new RuntimeError(stmt.names.get(i), "Walay ingana nga variable");
+            switch (existing) {
+                case Double v -> environment.assign(varToken, "TIPIK", Double.parseDouble(rawValue));
+                case String s -> environment.assign(varToken, "LETRA", rawValue);
+                case Integer integer -> environment.assign(varToken, "NUMERO", Integer.parseInt(rawValue));
+                case Boolean b -> {
+                    if (rawValue.equals("OO")) {
+                        environment.assign(varToken, "TINUOD", true);
+                    } else if (rawValue.equals("DILI")) {
+                        environment.assign(varToken, "TINUOD", false);
+                    } else {
+                        throw new RuntimeError(varToken, "Ang TINUOD dapat OO or DILI");
+                    }
+                }
+                case null, default -> throw new RuntimeError(stmt.names.get(i), "Walay ingana nga variable");
             }
         }
         return null;
